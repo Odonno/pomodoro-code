@@ -34,15 +34,29 @@ export function activate(context: ExtensionContext) {
 }
 
 class Pomodoro {
-	private _statusBarItem: StatusBarItem;
+	private _statusBarText: StatusBarItem;
+	private _statusBarStartButton: StatusBarItem;
+	private _statusBarStopButton: StatusBarItem;
 	private _timer: number;
 	private _currentTime: number;
 	private _status: PomodoroStatus;
 
 	constructor() {
 		// create a new status bar item
-        if (!this._statusBarItem) {
-            this._statusBarItem = window.createStatusBarItem(StatusBarAlignment.Left);
+        if (!this._statusBarText) {
+            this._statusBarText = window.createStatusBarItem(StatusBarAlignment.Left);
+        }
+		if (!this._statusBarStartButton) {
+            this._statusBarStartButton = window.createStatusBarItem(StatusBarAlignment.Left);
+			this._statusBarStartButton.text = '$(triangle-right)';
+			this._statusBarStartButton.command = 'extension.startPomodoro';
+			this._statusBarStartButton.show();
+        }
+		if (!this._statusBarStopButton) {
+            this._statusBarStopButton = window.createStatusBarItem(StatusBarAlignment.Left);
+			this._statusBarStopButton.text = '$(primitive-square)';
+			this._statusBarStopButton.command = 'extension.stopPomodoro';
+			this._statusBarStopButton.show();
         }
 
 		this._status = PomodoroStatus.None;
@@ -68,19 +82,15 @@ class Pomodoro {
 			
 			// stop the timer if no second left
 			if (this._currentTime <= 0) {
-				this.stop();
+				this.next();
 			}
 		}, 1000);
 	}
 
 	public stop() {
 		clearInterval(this._timer);
-
-		if (this._status == PomodoroStatus.Work) {
-			this.start(PomodoroStatus.Pause);
-		} else if (this._status == PomodoroStatus.Pause) {
-			this._status = PomodoroStatus.None;
-		}
+		this._status = PomodoroStatus.None;
+		this.update();
 	}
 
 	public reset() {
@@ -89,26 +99,36 @@ class Pomodoro {
 		this.update();
 	}
 
+	private next() {
+		if (this._status == PomodoroStatus.Work) {
+			this.start(PomodoroStatus.Pause);
+		} else if (this._status == PomodoroStatus.Pause) {
+			this.stop();
+		}
+	}
+
 	private update() {
 		let seconds = this._currentTime % 60;
 		let minutes = (this._currentTime - seconds) / 60;
 		
 		// update the status bar
-		this._statusBarItem.text = ((minutes < 10) ? '0' : '') + minutes + ':' + ((seconds < 10) ? '0' : '') + seconds;
-		
+		this._statusBarText.text = ((minutes < 10) ? '0' : '') + minutes + ':' + ((seconds < 10) ? '0' : '') + seconds;
+
 		if (this._status == PomodoroStatus.Work) {
-			this._statusBarItem.text += ' (work)';
+			this._statusBarText.text += ' (work)';
 		}
 		if (this._status == PomodoroStatus.Pause) {
-			this._statusBarItem.text += ' (pause)';
+			this._statusBarText.text += ' (pause)';
 		}
-		
-		this._statusBarItem.show();
+
+		this._statusBarText.show();
 	}
 
 	dispose() {
 		this.stop();
-        this._statusBarItem.dispose();
+        this._statusBarText.dispose();
+		this._statusBarStartButton.dispose();
+		this._statusBarStopButton.dispose();
     }
 }
 
