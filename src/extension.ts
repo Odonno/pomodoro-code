@@ -54,8 +54,11 @@ class Pomodoro {
 	}
 
 	private update() {
+		let seconds = this._currentTimer % 60;
+		let minutes = (this._currentTimer - seconds) / 60;
+		
 		// update the status bar
-		this._statusBarItem.text = (this._currentTimer / 60) + ':' + (this._currentTimer % 60);
+		this._statusBarItem.text = ((minutes < 10) ? '0' : '') + minutes + ':' + ((seconds < 10) ? '0' : '') + seconds;
 		this._statusBarItem.show();
 	}
 
