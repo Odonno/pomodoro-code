@@ -95,6 +95,14 @@ class Pomodoro {
 		
 		// update the status bar
 		this._statusBarItem.text = ((minutes < 10) ? '0' : '') + minutes + ':' + ((seconds < 10) ? '0' : '') + seconds;
+		
+		if (this._status == PomodoroStatus.Work) {
+			this._statusBarItem.text += ' (work)';
+		}
+		if (this._status == PomodoroStatus.Pause) {
+			this._statusBarItem.text += ' (pause)';
+		}
+		
 		this._statusBarItem.show();
 	}
 
