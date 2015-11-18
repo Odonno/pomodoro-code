@@ -42,7 +42,7 @@ class Pomodoro {
 	private _status: PomodoroStatus;
 
 	constructor() {
-		// create a new status bar item
+		// create status bar items
         if (!this._statusBarText) {
             this._statusBarText = window.createStatusBarItem(StatusBarAlignment.Left);
         }
@@ -50,13 +50,11 @@ class Pomodoro {
             this._statusBarStartButton = window.createStatusBarItem(StatusBarAlignment.Left);
 			this._statusBarStartButton.text = '$(triangle-right)';
 			this._statusBarStartButton.command = 'extension.startPomodoro';
-			this._statusBarStartButton.show();
         }
 		if (!this._statusBarStopButton) {
             this._statusBarStopButton = window.createStatusBarItem(StatusBarAlignment.Left);
 			this._statusBarStopButton.text = '$(primitive-square)';
 			this._statusBarStopButton.command = 'extension.stopPomodoro';
-			this._statusBarStopButton.show();
         }
 
 		this._status = PomodoroStatus.None;
@@ -111,7 +109,16 @@ class Pomodoro {
 		let seconds = this._currentTime % 60;
 		let minutes = (this._currentTime - seconds) / 60;
 		
-		// update the status bar
+		// update status bar (commands)
+		if (this._status == PomodoroStatus.None) {
+			this._statusBarStartButton.show();
+			this._statusBarStopButton.hide();
+		} else {
+			this._statusBarStartButton.hide();
+			this._statusBarStopButton.show();
+		}
+		
+		// update status bar (text)
 		this._statusBarText.text = ((minutes < 10) ? '0' : '') + minutes + ':' + ((seconds < 10) ? '0' : '') + seconds;
 
 		if (this._status == PomodoroStatus.Work) {
