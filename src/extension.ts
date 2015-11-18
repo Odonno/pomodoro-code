@@ -13,6 +13,7 @@ export function activate(context: ExtensionContext) {
 	// initialize a new Pomodoro manager
 	let pomodoro = new Pomodoro();
 
+	// list of commands
 	var startDisposable = commands.registerCommand('extension.startPomodoro', () => {
         pomodoro.start();
     });
@@ -21,10 +22,15 @@ export function activate(context: ExtensionContext) {
         pomodoro.stop();
     });
 	
+	var resetDisposable = commands.registerCommand('extension.resetPomodoro', () => {
+        pomodoro.reset();
+    });
+	
 	// Add to a list of disposables which are disposed when this extension is deactivated.
     context.subscriptions.push(pomodoro);
 	context.subscriptions.push(startDisposable);
 	context.subscriptions.push(stopDisposable);
+	context.subscriptions.push(resetDisposable);
 }
 
 class Pomodoro {
@@ -56,7 +62,9 @@ class Pomodoro {
 	}
 
 	public reset() {
-
+		this.stop();
+		this._currentTime = 25 * 60;
+		this.update();
 	}
 
 	private update() {

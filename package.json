@@ -22,6 +22,10 @@
 			{
 				"command": "extension.stopPomodoro",
 				"title": "Stop Pomodoro"
+			},
+			{
+				"command": "extension.resetPomodoro",
+				"title": "Reset Pomodoro"
 			}
 		]
 	},
