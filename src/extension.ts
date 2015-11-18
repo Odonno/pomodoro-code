@@ -21,7 +21,7 @@ export function activate(context: ExtensionContext) {
 	var stopDisposable = commands.registerCommand('extension.stopPomodoro', () => {
         pomodoro.stop();
     });
-	
+
 	var resetDisposable = commands.registerCommand('extension.resetPomodoro', () => {
         pomodoro.reset();
     });
@@ -37,6 +37,7 @@ class Pomodoro {
 	private _statusBarItem: StatusBarItem;
 	private _timer: number;
 	private _currentTime: number;
+	private _status: PomodoroStatus;
 
 	constructor() {
 		// create a new status bar item
@@ -44,12 +45,22 @@ class Pomodoro {
             this._statusBarItem = window.createStatusBarItem(StatusBarAlignment.Left);
         }
 
+		this._status = PomodoroStatus.None;
 		this._currentTime = 0;
 		this.update();
 	}
 
-	public start() {
-		this._currentTime = 25 * 60;
+	public start(status: PomodoroStatus = PomodoroStatus.Work) {
+		if (status == PomodoroStatus.Work) {
+			this._currentTime = 25 * 60;
+			this._status = status;
+		} else if (status == PomodoroStatus.Pause) {
+			this._currentTime = 5 * 60;
+			this._status = status;
+		} else {
+			console.error("This status is not available, can't start the timer");
+		}
+
 		this._timer = setInterval(() => {
 			// 1 second left
 			this._currentTime--;
@@ -64,6 +75,12 @@ class Pomodoro {
 
 	public stop() {
 		clearInterval(this._timer);
+
+		if (this._status == PomodoroStatus.Work) {
+			this.start(PomodoroStatus.Pause);
+		} else if (this._status == PomodoroStatus.Pause) {
+			this._status = PomodoroStatus.None;
+		}
 	}
 
 	public reset() {
@@ -85,4 +102,10 @@ class Pomodoro {
 		this.stop();
         this._statusBarItem.dispose();
     }
+}
+
+enum PomodoroStatus {
+	None,
+	Work,
+	Pause
 }
