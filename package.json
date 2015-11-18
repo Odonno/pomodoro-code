@@ -14,10 +14,16 @@
 	],
 	"main": "./out/src/extension",
 	"contributes": {
-		"commands": [{
-			"command": "extension.startPomodoro",
-			"title": "Start Pomodoro"
-		}]
+		"commands": [
+			{
+				"command": "extension.startPomodoro",
+				"title": "Start Pomodoro"
+			},
+			{
+				"command": "extension.stopPomodoro",
+				"title": "Stop Pomodoro"
+			}
+		]
 	},
 	"scripts": {
 		"vscode:prepublish": "node ./node_modules/vscode/bin/compile",

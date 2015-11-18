@@ -13,18 +13,24 @@ export function activate(context: ExtensionContext) {
 	// initialize a new Pomodoro manager
 	let pomodoro = new Pomodoro();
 
-	var disposable = commands.registerCommand('extension.startPomodoro', () => {
+	var startDisposable = commands.registerCommand('extension.startPomodoro', () => {
         pomodoro.start();
     });
 
+	var stopDisposable = commands.registerCommand('extension.stopPomodoro', () => {
+        pomodoro.stop();
+    });
+	
 	// Add to a list of disposables which are disposed when this extension is deactivated.
     context.subscriptions.push(pomodoro);
+	context.subscriptions.push(startDisposable);
+	context.subscriptions.push(stopDisposable);
 }
 
 class Pomodoro {
 	private _statusBarItem: StatusBarItem;
-	private _timer;
-	private _currentTimer: number;
+	private _timer: number;
+	private _currentTime: number;
 
 	constructor() {
 		// create a new status bar item
@@ -32,21 +38,21 @@ class Pomodoro {
             this._statusBarItem = window.createStatusBarItem(StatusBarAlignment.Left);
         }
 
-		this._currentTimer = 0;
+		this._currentTime = 0;
 		this.update();
 	}
 
 	public start() {
-		this._currentTimer = 25 * 60;
+		this._currentTime = 25 * 60;
 		this._timer = setInterval(() => {
 			// 1 second left
-			this._currentTimer--;
+			this._currentTime--;
 			this.update();
 		}, 1000);
 	}
 
 	public stop() {
-
+		clearInterval(this._timer);
 	}
 
 	public reset() {
@@ -54,8 +60,8 @@ class Pomodoro {
 	}
 
 	private update() {
-		let seconds = this._currentTimer % 60;
-		let minutes = (this._currentTimer - seconds) / 60;
+		let seconds = this._currentTime % 60;
+		let minutes = (this._currentTime - seconds) / 60;
 		
 		// update the status bar
 		this._statusBarItem.text = ((minutes < 10) ? '0' : '') + minutes + ':' + ((seconds < 10) ? '0' : '') + seconds;
@@ -63,6 +69,7 @@ class Pomodoro {
 	}
 
 	dispose() {
+		this.stop();
         this._statusBarItem.dispose();
     }
 }
