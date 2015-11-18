@@ -54,6 +54,11 @@ class Pomodoro {
 			// 1 second left
 			this._currentTime--;
 			this.update();
+			
+			// stop the timer if no second left
+			if (this._currentTime <= 0) {
+				this.stop();
+			}
 		}, 1000);
 	}
 
