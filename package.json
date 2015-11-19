@@ -1,7 +1,7 @@
 {
 	"name": "pomodoro-code",
 	"description": "A pomodoro timer inside your Visual Studio Code IDE",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"bugs": {
         "url": "https://github.com/Odonno/pomodoro-code/issues"
     },
