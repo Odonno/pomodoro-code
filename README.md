@@ -2,6 +2,8 @@
 
 A pomodoro timer inside your Visual Studio Code IDE
 
+![pomodoro-code](https://cloud.githubusercontent.com/assets/6053067/11303463/5f8a33aa-8fa3-11e5-9f41-2c8ed47b9446.gif)
+
 ## Commands
 
 There is a list of commands you can use in VS Code :
