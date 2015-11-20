@@ -62,17 +62,20 @@ class Pomodoro {
 		this._status = PomodoroStatus.None;
 		this._timer = new Timer();
 		this.draw();
+		this.toggleButtons();
 	}
 
 	public start(status: PomodoroStatus = PomodoroStatus.Work) {
 		if (status == PomodoroStatus.Work) {
 			this._status = status;
+			this.toggleButtons();
 			this._timer.start(25 * 60, 1000, () => {
 				this.update();
 				this.draw();
 			});
 		} else if (status == PomodoroStatus.Pause) {
 			this._status = status;
+			this.toggleButtons();
 			this._timer.start(5 * 60, 1000, () => {
 				this.update();
 				this.draw();
@@ -87,6 +90,7 @@ class Pomodoro {
 	public stop() {
 		this._timer.stop();
 		this._status = PomodoroStatus.None;
+		this.toggleButtons();
 		this.draw();
 	}
 
@@ -113,7 +117,20 @@ class Pomodoro {
 	private draw() {
 		let seconds = this._timer.currentTime % 60;
 		let minutes = (this._timer.currentTime - seconds) / 60;
-		
+
+		// update status bar (text)
+		let timerPart = ((minutes < 10) ? '0' : '') + minutes + ':' + ((seconds < 10) ? '0' : '') + seconds
+		let statusPart = '';
+		if (this._status == PomodoroStatus.Work) {
+			statusPart += ' (work)';
+		} else if (this._status == PomodoroStatus.Pause) {
+			statusPart += ' (pause)';
+		}
+
+		this._statusBarText.text = timerPart + statusPart;
+	}
+
+	private toggleButtons() {
 		// update status bar (commands)
 		if (this._status == PomodoroStatus.None) {
 			this._statusBarStartButton.show();
@@ -123,16 +140,7 @@ class Pomodoro {
 			this._statusBarStopButton.show();
 		}
 		
-		// update status bar (text)
-		let timerPart = ((minutes < 10) ? '0' : '') + minutes + ':' + ((seconds < 10) ? '0' : '') + seconds
-		let statusPart = '';
-		if (this._status == PomodoroStatus.Work) {
-			statusPart += ' (work)';
-		} else if (this._status == PomodoroStatus.Pause) {
-			statusPart += ' (pause)';
-		}
-		
-		this._statusBarText.text = timerPart + statusPart;
+		this._statusBarText.show();
 	}
 
 	dispose() {
@@ -170,7 +178,7 @@ class Timer {
 		if (this._timerId != 0) {
 			clearInterval(this._timerId);
 		}
-		
+
 		this._timerId = 0;
 	}
 
