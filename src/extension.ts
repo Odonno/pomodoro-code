@@ -37,9 +37,8 @@ class Pomodoro {
 	private _statusBarText: StatusBarItem;
 	private _statusBarStartButton: StatusBarItem;
 	private _statusBarStopButton: StatusBarItem;
-	private _timer: number;
-	private _currentTime: number;
 	private _status: PomodoroStatus;
+	private _timer: Timer;
 
 	constructor() {
 		// create status bar items
@@ -58,47 +57,45 @@ class Pomodoro {
         }
 
 		this._status = PomodoroStatus.None;
-		this._currentTime = 0;
+		this._timer = new Timer();
 		this.draw();
 	}
 
 	public start(status: PomodoroStatus = PomodoroStatus.Work) {
 		if (status == PomodoroStatus.Work) {
-			this._currentTime = 25 * 60;
 			this._status = status;
+			this._timer.start(25 * 60, 1000, () => {
+				this.update();
+				this.draw();
+			});
 		} else if (status == PomodoroStatus.Pause) {
-			this._currentTime = 5 * 60;
 			this._status = status;
+			this._timer.start(5 * 60, 1000, () => {
+				this.update();
+				this.draw();
+			});
 		} else {
 			console.error("This status is not available, can't start the timer");
 		}
-
-		this._timer = setInterval(() => {
-			this.update();
-			this.draw();
-		}, 1000);
 
 		this.draw();
 	}
 
 	public stop() {
-		clearInterval(this._timer);
+		this._timer.stop();
 		this._status = PomodoroStatus.None;
 		this.draw();
 	}
 
 	public reset() {
 		this.stop();
-		this._currentTime = 25 * 60;
+		this._timer.currentTime = 25 * 60;
 		this.draw();
 	}
 
 	private update() {
-		// 1 second left
-		this._currentTime--;
-		
 		// stop the timer if no second left
-		if (this._currentTime <= 0) {
+		if (this._timer.currentTime <= 0) {
 			if (this._status == PomodoroStatus.Work) {
 				this.start(PomodoroStatus.Pause);
 			} else if (this._status == PomodoroStatus.Pause) {
@@ -108,8 +105,8 @@ class Pomodoro {
 	}
 
 	private draw() {
-		let seconds = this._currentTime % 60;
-		let minutes = (this._currentTime - seconds) / 60;
+		let seconds = this._timer.currentTime % 60;
+		let minutes = (this._timer.currentTime - seconds) / 60;
 		
 		// update status bar (commands)
 		if (this._status == PomodoroStatus.None) {
@@ -139,6 +136,40 @@ class Pomodoro {
 		this._statusBarStartButton.dispose();
 		this._statusBarStopButton.dispose();
     }
+}
+
+class Timer {
+	private _timerId: number;
+	private _interval: number;
+
+	constructor(public currentTime: number = 0) {
+	}
+
+	public start(time: number, interval: number = 1000, callback) {
+		if (this._timerId == 0) {
+			this.currentTime = time;
+			this._interval = interval;
+
+			this._timerId = setInterval(() => {
+				this.tick();
+				callback();
+			}, interval);
+		} else {
+			console.error('A timer instance is already running...');
+		}
+	}
+
+	public stop() {
+		if (this._timerId != 0) {
+			clearInterval(this._timerId);
+		}
+		
+		this._timerId = 0;
+	}
+
+	private tick() {
+		this.currentTime -= this._interval / 1000;
+	}
 }
 
 enum PomodoroStatus {
