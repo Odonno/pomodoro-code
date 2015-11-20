@@ -16,3 +16,7 @@ There is a list of commands you can use in VS Code :
 
 The status bar contains the current timer of your Pomodoro. 
 It also contains buttons to start or stop Pomodoro.
+
+## Alerts
+
+When Work/Pause timer is over, it alerts you by showing you a pop-up.
