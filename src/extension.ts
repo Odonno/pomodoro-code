@@ -66,7 +66,7 @@ class Pomodoro {
 	public start(status: PomodoroStatus = PomodoroStatus.Work) {
 		if (status == PomodoroStatus.Work) {
 			this._status = status;
-			this._timer.start(25 * 60, 1000, () => {
+			this._timer.start(10, 1000, () => {
 				this.update();
 				this.draw();
 			});
@@ -99,8 +99,10 @@ class Pomodoro {
 		// stop the timer if no second left
 		if (this._timer.currentTime <= 0) {
 			if (this._status == PomodoroStatus.Work) {
+				window.showInformationMessage('Work done ! Take a break. :)');
 				this.start(PomodoroStatus.Pause);
 			} else if (this._status == PomodoroStatus.Pause) {
+				window.showInformationMessage('Pause is over ! :(');
 				this.stop();
 			}
 		}
