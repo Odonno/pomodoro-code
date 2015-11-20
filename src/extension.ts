@@ -44,6 +44,7 @@ class Pomodoro {
 		// create status bar items
         if (!this._statusBarText) {
             this._statusBarText = window.createStatusBarItem(StatusBarAlignment.Left);
+			this._statusBarText.show();
         }
 		if (!this._statusBarStartButton) {
             this._statusBarStartButton = window.createStatusBarItem(StatusBarAlignment.Left);
@@ -123,16 +124,15 @@ class Pomodoro {
 		}
 		
 		// update status bar (text)
-		this._statusBarText.text = ((minutes < 10) ? '0' : '') + minutes + ':' + ((seconds < 10) ? '0' : '') + seconds;
-
+		let timerPart = ((minutes < 10) ? '0' : '') + minutes + ':' + ((seconds < 10) ? '0' : '') + seconds
+		let statusPart = '';
 		if (this._status == PomodoroStatus.Work) {
-			this._statusBarText.text += ' (work)';
+			statusPart += ' (work)';
+		} else if (this._status == PomodoroStatus.Pause) {
+			statusPart += ' (pause)';
 		}
-		if (this._status == PomodoroStatus.Pause) {
-			this._statusBarText.text += ' (pause)';
-		}
-
-		this._statusBarText.show();
+		
+		this._statusBarText.text = timerPart + statusPart;
 	}
 
 	dispose() {
