@@ -49,11 +49,13 @@ class Pomodoro {
             this._statusBarStartButton = window.createStatusBarItem(StatusBarAlignment.Left);
 			this._statusBarStartButton.text = '$(triangle-right)';
 			this._statusBarStartButton.command = 'extension.startPomodoro';
+			this._statusBarStartButton.tooltip = 'Start Pomodoro';
         }
 		if (!this._statusBarStopButton) {
             this._statusBarStopButton = window.createStatusBarItem(StatusBarAlignment.Left);
 			this._statusBarStopButton.text = '$(primitive-square)';
 			this._statusBarStopButton.command = 'extension.stopPomodoro';
+			this._statusBarStopButton.tooltip = 'Stop Pomodoro';
         }
 
 		this._status = PomodoroStatus.None;
