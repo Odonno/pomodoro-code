@@ -59,7 +59,7 @@ class Pomodoro {
 
 		this._status = PomodoroStatus.None;
 		this._currentTime = 0;
-		this.update();
+		this.draw();
 	}
 
 	public start(status: PomodoroStatus = PomodoroStatus.Work) {
@@ -74,38 +74,40 @@ class Pomodoro {
 		}
 
 		this._timer = setInterval(() => {
-			// 1 second left
-			this._currentTime--;
 			this.update();
-			
-			// stop the timer if no second left
-			if (this._currentTime <= 0) {
-				this.next();
-			}
+			this.draw();
 		}, 1000);
+
+		this.draw();
 	}
 
 	public stop() {
 		clearInterval(this._timer);
 		this._status = PomodoroStatus.None;
-		this.update();
+		this.draw();
 	}
 
 	public reset() {
 		this.stop();
 		this._currentTime = 25 * 60;
-		this.update();
-	}
-
-	private next() {
-		if (this._status == PomodoroStatus.Work) {
-			this.start(PomodoroStatus.Pause);
-		} else if (this._status == PomodoroStatus.Pause) {
-			this.stop();
-		}
+		this.draw();
 	}
 
 	private update() {
+		// 1 second left
+		this._currentTime--;
+		
+		// stop the timer if no second left
+		if (this._currentTime <= 0) {
+			if (this._status == PomodoroStatus.Work) {
+				this.start(PomodoroStatus.Pause);
+			} else if (this._status == PomodoroStatus.Pause) {
+				this.stop();
+			}
+		}
+	}
+
+	private draw() {
 		let seconds = this._currentTime % 60;
 		let minutes = (this._currentTime - seconds) / 60;
 		
