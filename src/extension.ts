@@ -148,6 +148,8 @@ class Timer {
 	private _interval: number;
 
 	constructor(public currentTime: number = 0) {
+		this._timerId = 0;
+		this._interval = 1000;
 	}
 
 	public start(time: number, interval: number = 1000, callback) {
