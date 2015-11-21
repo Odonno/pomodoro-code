@@ -81,6 +81,21 @@ suite("Extension Tests", () => {
 				done();
 			}, 1000); // after 1 second	
 		});
+
+		test("A stopped timer should not tick", (done) => {
+			// arrange
+			let timer = new pomodoroExtension.Timer();
+			
+			// act
+			timer.start(5, 1000, () => { });
+			timer.stop();
+			
+			// assert
+			setTimeout(() => {
+				assert.equal(5, timer.currentTime);
+				done();
+			}, 1000); // after 1 second	
+		});
 	});
 
 	suite("Pomodoro Tests", () => {
