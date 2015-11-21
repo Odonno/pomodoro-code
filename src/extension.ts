@@ -33,7 +33,7 @@ export function activate(context: ExtensionContext) {
 	context.subscriptions.push(resetDisposable);
 }
 
-class Pomodoro {
+export class Pomodoro {
 	private _statusBarText: StatusBarItem;
 	private _statusBarStartButton: StatusBarItem;
 	private _statusBarStopButton: StatusBarItem;
@@ -159,7 +159,7 @@ class Pomodoro {
     }
 }
 
-class Timer {
+export class Timer {
 	private _timerId: number;
 	private _interval: number;
 
@@ -195,7 +195,7 @@ class Timer {
 	}
 }
 
-enum PomodoroStatus {
+export enum PomodoroStatus {
 	None,
 	Work,
 	Pause
