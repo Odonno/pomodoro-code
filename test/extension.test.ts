@@ -15,30 +15,32 @@ import * as pomodoroExtension from '../src/extension';
 suite("Extension Tests", () => {
 
 	suite("Timer Tests", () => {
-		test("A new timer should have default values", () => {
+		test("A new timer should have default values", (done) => {
 			// arrange
-			var timer = new pomodoroExtension.Timer();
+			let timer = new pomodoroExtension.Timer();
 			
 			// act
 			
 			// assert			
 			assert.equal(0, timer.currentTime);
+			done();
 		});
 
-		test("Start a timer should set current time", () => {
+		test("Start a timer should set current time", (done) => {
 			// arrange
-			var timer = new pomodoroExtension.Timer();
+			let timer = new pomodoroExtension.Timer();
 			
 			// act
 			timer.start(1, 1000, () => { });
 			
 			// assert			
 			assert.equal(1, timer.currentTime);
+			done();
 		});
-		
-		test("Start a timer twice should not override the first timer", () => {
+
+		test("Start a timer twice should not override the first timer", (done) => {
 			// arrange
-			var timer = new pomodoroExtension.Timer();
+			let timer = new pomodoroExtension.Timer();
 			
 			// act
 			timer.start(1, 1000, () => { });
@@ -46,11 +48,12 @@ suite("Extension Tests", () => {
 			
 			// assert			
 			assert.equal(1, timer.currentTime);
+			done();
 		});
-		
-		test("A timer should tick at least once", () => {
+
+		test("A timer should tick at least once", (done) => {
 			// arrange
-			var timer = new pomodoroExtension.Timer();
+			let timer = new pomodoroExtension.Timer();
 			
 			// act
 			timer.start(5, 1000, () => { });
@@ -58,6 +61,24 @@ suite("Extension Tests", () => {
 			// assert
 			setTimeout(() => {
 				assert.equal(4, timer.currentTime);
+				done();
+			}, 1000); // after 1 second	
+		});
+
+		test("A timer should execute callback each tick", (done) => {
+			// arrange
+			let timer = new pomodoroExtension.Timer();
+			let ticks = 0;
+			
+			// act
+			timer.start(5, 1000, () => {
+				ticks++;
+			});
+			
+			// assert
+			setTimeout(() => {
+				assert.equal(1, ticks);
+				done();
 			}, 1000); // after 1 second	
 		});
 	});
