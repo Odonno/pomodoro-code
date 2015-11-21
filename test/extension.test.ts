@@ -47,6 +47,19 @@ suite("Extension Tests", () => {
 			// assert			
 			assert.equal(1, timer.currentTime);
 		});
+		
+		test("A timer should tick at least once", () => {
+			// arrange
+			var timer = new pomodoroExtension.Timer();
+			
+			// act
+			timer.start(5, 1000, () => { });
+			
+			// assert
+			setTimeout(() => {
+				assert.equal(4, timer.currentTime);
+			}, 1000); // after 1 second	
+		});
 	});
 
 	suite("Pomodoro Tests", () => {
