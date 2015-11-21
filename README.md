@@ -20,3 +20,7 @@ It also contains buttons to start or stop Pomodoro.
 ## Alerts
 
 When Work/Pause timer is over, it alerts you by showing you a pop-up.
+
+## Credits
+
+Thanks [José Campos](https://thenounproject.com/jcampos/) to let me use the Pomodoro icon.
