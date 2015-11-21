@@ -35,6 +35,18 @@ suite("Extension Tests", () => {
 			// assert			
 			assert.equal(1, timer.currentTime);
 		});
+		
+		test("Start a timer twice should not override the first timer", () => {
+			// arrange
+			var timer = new pomodoroExtension.Timer();
+			
+			// act
+			timer.start(1, 1000, () => { });
+			timer.start(5, 1000, () => { });
+			
+			// assert			
+			assert.equal(1, timer.currentTime);
+		});
 	});
 
 	suite("Pomodoro Tests", () => {
