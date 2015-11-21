@@ -77,14 +77,14 @@ export class Pomodoro {
 		if (status == PomodoroStatus.Work) {
 			this.status = status;
 			this.toggleButtons();
-			this._timer.start(25 * 60, 1000, () => {
+			this._timer.start(25 * 60, () => {
 				this.update();
 				this.draw();
 			});
 		} else if (status == PomodoroStatus.Pause) {
 			this.status = status;
 			this.toggleButtons();
-			this._timer.start(5 * 60, 1000, () => {
+			this._timer.start(5 * 60, () => {
 				this.update();
 				this.draw();
 			});
@@ -161,22 +161,19 @@ export class Pomodoro {
 
 export class Timer {
 	private _timerId: number;
-	private _interval: number;
 
-	constructor(public currentTime: number = 0) {
+	constructor(public currentTime: number = 0, public interval: number = 1000) {
 		this._timerId = 0;
-		this._interval = 1000;
 	}
 
-	public start(time: number, interval: number = 1000, callback) {
+	public start(time: number, callback) {
 		if (this._timerId == 0) {
 			this.currentTime = time;
-			this._interval = interval;
 
 			this._timerId = setInterval(() => {
 				this.tick();
 				callback();
-			}, interval);
+			}, this.interval);
 		} else {
 			console.error('A timer instance is already running...');
 		}
@@ -191,7 +188,7 @@ export class Timer {
 	}
 
 	private tick() {
-		this.currentTime -= this._interval / 1000;
+		this.currentTime -= this.interval / 1000;
 	}
 }
 

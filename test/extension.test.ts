@@ -23,6 +23,7 @@ suite("Extension Tests", () => {
 			
 			// assert			
 			assert.equal(0, timer.currentTime);
+			assert.equal(1000, timer.interval);
 			done();
 		});
 
@@ -31,7 +32,7 @@ suite("Extension Tests", () => {
 			let timer = new pomodoroExtension.Timer();
 			
 			// act
-			timer.start(1, 1000, () => { });
+			timer.start(1, () => { });
 			
 			// assert			
 			assert.equal(1, timer.currentTime);
@@ -43,8 +44,8 @@ suite("Extension Tests", () => {
 			let timer = new pomodoroExtension.Timer();
 			
 			// act
-			timer.start(1, 1000, () => { });
-			timer.start(5, 1000, () => { });
+			timer.start(1, () => { });
+			timer.start(5, () => { });
 			
 			// assert			
 			assert.equal(1, timer.currentTime);
@@ -56,7 +57,7 @@ suite("Extension Tests", () => {
 			let timer = new pomodoroExtension.Timer();
 			
 			// act
-			timer.start(5, 1000, () => { });
+			timer.start(5, () => { });
 			
 			// assert
 			setTimeout(() => {
@@ -71,7 +72,7 @@ suite("Extension Tests", () => {
 			let ticks = 0;
 			
 			// act
-			timer.start(5, 1000, () => {
+			timer.start(5, () => {
 				ticks++;
 			});
 			
@@ -87,7 +88,7 @@ suite("Extension Tests", () => {
 			let timer = new pomodoroExtension.Timer();
 			
 			// act
-			timer.start(5, 1000, () => { });
+			timer.start(5, () => { });
 			timer.stop();
 			
 			// assert
