@@ -2,6 +2,8 @@
 // import the module and reference it with the alias vscode in your code below
 import {workspace, window, commands, Disposable, ExtensionContext, StatusBarAlignment, StatusBarItem, TextDocument} from 'vscode';
 
+var fs = require('fs');
+
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: ExtensionContext) {
@@ -10,25 +12,33 @@ export function activate(context: ExtensionContext) {
 	// This line of code will only be executed once when your extension is activated
 	console.log('Congratulations, your extension "pomodoro-code" is now active!');
 
+	// create variables
+	let userHome = process.env[(process.platform == 'win32' ? 'USERPROFILE' : 'HOME')];
+	let configRelativeUri = '/.vscode/extensions/odonno.pomodoro-code/out/config.json';
+	let configFileUri = userHome + configRelativeUri;
+
+	// read config file
+	let config = fs.readFileSync(configFileUri, 'utf8');
+	config = JSON.parse(config);
+
 	// initialize a new Pomodoro manager
 	let pomodoro = new Pomodoro();
 
 	// list of commands
-	var startDisposable = commands.registerCommand('extension.startPomodoro', () => {
+	let startDisposable = commands.registerCommand('extension.startPomodoro', () => {
         pomodoro.start();
     });
 
-	var stopDisposable = commands.registerCommand('extension.stopPomodoro', () => {
+	let stopDisposable = commands.registerCommand('extension.stopPomodoro', () => {
         pomodoro.stop();
     });
 
-	var resetDisposable = commands.registerCommand('extension.resetPomodoro', () => {
+	let resetDisposable = commands.registerCommand('extension.resetPomodoro', () => {
         pomodoro.reset();
     });
 
-	var configureDisposable = commands.registerCommand('extension.configurePomodoro', () => {
-		let userHome = process.env[(process.platform == 'win32' ? 'USERPROFILE' : 'HOME')];
-		workspace.openTextDocument(userHome + '/.vscode/extensions/odonno.pomodoro-code/out/config.json')
+	let configureDisposable = commands.registerCommand('extension.configurePomodoro', () => {
+		workspace.openTextDocument(configFileUri)
 			.then((document) => {
 				window.showTextDocument(document);
 			});
