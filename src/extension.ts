@@ -68,6 +68,9 @@ export class Pomodoro {
 	}
 
 	private _timer: Timer;
+	public get timer() {
+		return this._timer;
+	}
 
 	constructor(public workTime: number = 25 * 60, public pauseTime: number = 5 * 60) {
 		// create status bar items
