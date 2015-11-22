@@ -179,6 +179,19 @@ suite("Extension Tests", () => {
 			assert.equal(PomodoroStatus.None, pomodoro.status);
 			done();
 		});
+		
+		test("Resetting a working Pomodoro should stop Pomodoro", (done) => {
+			// arrange
+			let pomodoro = new Pomodoro();
+			pomodoro.start();
+			
+			// act
+			pomodoro.reset();
+			
+			// assert
+			assert.equal(PomodoroStatus.None, pomodoro.status);
+			done();
+		});
 	});
 
 });
