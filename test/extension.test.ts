@@ -112,6 +112,18 @@ suite("Extension Tests", () => {
 			assert.equal(5, pomodoro.pauseTime);
 			done();
 		});
+		
+		test("A new Pomodoro with time values should override them", (done) => {
+			// arrange
+			let pomodoro = new Pomodoro(33, 12);
+			
+			// act
+			
+			// assert
+			assert.equal(33, pomodoro.workTime);
+			assert.equal(12, pomodoro.pauseTime);
+			done();
+		});
 	});
 
 });
