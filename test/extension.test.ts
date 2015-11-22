@@ -24,6 +24,7 @@ suite("Extension Tests", () => {
 			// assert			
 			assert.equal(0, timer.currentTime);
 			assert.equal(1000, timer.interval);
+			assert.equal(false, timer.isRunning);
 			done();
 		});
 
@@ -36,6 +37,7 @@ suite("Extension Tests", () => {
 			
 			// assert			
 			assert.equal(1, timer.currentTime);
+			assert.equal(true, timer.isRunning);
 			done();
 		});
 
@@ -49,6 +51,7 @@ suite("Extension Tests", () => {
 			
 			// assert			
 			assert.equal(1, timer.currentTime);
+			assert.equal(true, timer.isRunning);
 			done();
 		});
 
@@ -62,6 +65,7 @@ suite("Extension Tests", () => {
 			// assert
 			setTimeout(() => {
 				assert.equal(4, timer.currentTime);
+				assert.equal(true, timer.isRunning);
 				done();
 			}, 1000); // after 1 second	
 		});
@@ -79,6 +83,7 @@ suite("Extension Tests", () => {
 			// assert
 			setTimeout(() => {
 				assert.equal(1, ticks);
+				assert.equal(true, timer.isRunning);
 				done();
 			}, 1000); // after 1 second	
 		});
@@ -94,6 +99,7 @@ suite("Extension Tests", () => {
 			// assert
 			setTimeout(() => {
 				assert.equal(5, timer.currentTime);
+				assert.equal(false, timer.isRunning);
 				done();
 			}, 1000); // after 1 second	
 		});
@@ -111,6 +117,7 @@ suite("Extension Tests", () => {
 			assert.equal(25 * 60, pomodoro.workTime);
 			assert.equal(5 * 60, pomodoro.pauseTime);
 			assert.equal(0, pomodoro.timer.currentTime);
+			assert.equal(false, pomodoro.timer.isRunning);
 			done();
 		});
 
@@ -136,6 +143,7 @@ suite("Extension Tests", () => {
 			// assert
 			assert.equal(PomodoroStatus.Work, pomodoro.status);
 			assert.equal(25 * 60, pomodoro.timer.currentTime);
+			assert.equal(true, pomodoro.timer.isRunning);
 			done();
 		});
 
@@ -151,6 +159,7 @@ suite("Extension Tests", () => {
 			setTimeout(() => {
 				assert.equal(PomodoroStatus.Pause, pomodoro.status);
 				assert.equal(5, pomodoro.timer.currentTime);
+				assert.equal(true, pomodoro.timer.isRunning);
 				done();
 			}, 1000); // after 1 second
 		});
@@ -166,6 +175,7 @@ suite("Extension Tests", () => {
 				assert.equal(PomodoroStatus.Pause, pomodoro.status);
 				setTimeout(() => {
 					assert.equal(PomodoroStatus.None, pomodoro.status);
+					assert.equal(false, pomodoro.timer.isRunning);
 					done();
 				}, 1000); // after another 1 second
 			}, 1000); // after 1 second
@@ -182,6 +192,7 @@ suite("Extension Tests", () => {
 				pomodoro.stop();
 				assert.equal(PomodoroStatus.None, pomodoro.status);
 				assert.equal(25 * 60 - 1, pomodoro.timer.currentTime);
+				assert.equal(false, pomodoro.timer.isRunning);
 				done();
 			}, 1000); // after 1 second
 		});
@@ -197,6 +208,7 @@ suite("Extension Tests", () => {
 				pomodoro.reset();
 				assert.equal(PomodoroStatus.None, pomodoro.status);
 				assert.equal(25 * 60, pomodoro.timer.currentTime);
+				assert.equal(false, pomodoro.timer.isRunning);
 				done();
 			}, 1000); // after 1 second
 		});
@@ -212,6 +224,7 @@ suite("Extension Tests", () => {
 				pomodoro.dispose();
 				assert.equal(PomodoroStatus.None, pomodoro.status);
 				assert.equal(25 * 60 - 1, pomodoro.timer.currentTime);
+				assert.equal(false, pomodoro.timer.isRunning);
 				done();
 			}, 1000); // after 1 second
 		});

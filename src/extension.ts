@@ -183,6 +183,9 @@ export class Pomodoro {
 
 export class Timer {
 	private _timerId: number;
+	public get isRunning() {
+		return this._timerId != 0;
+	}
 
 	constructor(public currentTime: number = 0, public interval: number = 1000) {
 		this._timerId = 0;
