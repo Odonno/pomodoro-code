@@ -9,9 +9,13 @@ A pomodoro timer inside your Visual Studio Code IDE
 There is a list of commands you can use in VS Code :
 
 * Start Pomodoro
+    * Start a new Pomodoro
 * Stop Pomodoro
+    * Pause the current Pomodoro and wait
 * Reset Pomodoro
+    * Stop the existing Pomodoro and wait to start with a fresh new one
 * Configure Pomodoro
+    * Open `config.json` file to update the configuration of Pomodoro
 
 ## Status Bar
 
