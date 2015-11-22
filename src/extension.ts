@@ -1,6 +1,6 @@
 // the module 'vscode' contains the VS Code extensibility API
 // import the module and reference it with the alias vscode in your code below
-import {window, commands, Disposable, ExtensionContext, StatusBarAlignment, StatusBarItem, TextDocument} from 'vscode'; 
+import {workspace, window, commands, Disposable, ExtensionContext, StatusBarAlignment, StatusBarItem, TextDocument} from 'vscode';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -25,19 +25,28 @@ export function activate(context: ExtensionContext) {
 	var resetDisposable = commands.registerCommand('extension.resetPomodoro', () => {
         pomodoro.reset();
     });
+
+	var configureDisposable = commands.registerCommand('extension.configurePomodoro', () => {
+		let userHome = process.env[(process.platform == 'win32' ? 'USERPROFILE' : 'HOME')];
+		workspace.openTextDocument(userHome + '/.vscode/extensions/odonno.pomodoro-code/out/config.json')
+			.then((document) => {
+				window.showTextDocument(document);
+			});
+    });
 	
 	// Add to a list of disposables which are disposed when this extension is deactivated.
     context.subscriptions.push(pomodoro);
 	context.subscriptions.push(startDisposable);
 	context.subscriptions.push(stopDisposable);
 	context.subscriptions.push(resetDisposable);
+	context.subscriptions.push(configureDisposable);
 }
 
 export class Pomodoro {
 	private _statusBarText: StatusBarItem;
 	private _statusBarStartButton: StatusBarItem;
 	private _statusBarStopButton: StatusBarItem;
-	
+
 	private _status: PomodoroStatus;
 	public get status() {
 		return this._status;
@@ -46,7 +55,7 @@ export class Pomodoro {
 		this._status = status;
 		this.toggleButtons();
 	}
-	
+
 	private _timer: Timer;
 
 	constructor() {
@@ -98,7 +107,7 @@ export class Pomodoro {
 	public stop() {
 		this._timer.stop();
 		this.status = PomodoroStatus.None;
-		
+
 		this.draw();
 	}
 

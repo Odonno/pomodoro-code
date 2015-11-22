@@ -10,7 +10,8 @@ There is a list of commands you can use in VS Code :
 
 * Start Pomodoro
 * Stop Pomodoro
-* Reset
+* Reset Pomodoro
+* Configure Pomodoro
 
 ## Status Bar
 

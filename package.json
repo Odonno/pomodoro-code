@@ -39,6 +39,10 @@
 			{
 				"command": "extension.resetPomodoro",
 				"title": "Reset Pomodoro"
+			},
+			{
+				"command": "extension.configurePomodoro",
+				"title": "Configure Pomodoro"
 			}
 		]
 	},
