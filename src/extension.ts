@@ -118,7 +118,6 @@ export class Pomodoro {
 	public stop() {
 		this._timer.stop();
 		this.status = PomodoroStatus.None;
-
 		this.draw();
 	}
 

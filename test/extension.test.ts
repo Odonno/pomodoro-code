@@ -166,6 +166,19 @@ suite("Extension Tests", () => {
 				}, 1000); // after another 1 second
 			}, 1000); // after 1 second
 		});
+		
+		test("Stopping a working Pomodoro should update status", (done) => {
+			// arrange
+			let pomodoro = new Pomodoro();
+			pomodoro.start();
+			
+			// act
+			pomodoro.stop();
+			
+			// assert
+			assert.equal(PomodoroStatus.None, pomodoro.status);
+			done();
+		});
 	});
 
 });
