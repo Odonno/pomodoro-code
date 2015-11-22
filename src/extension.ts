@@ -69,7 +69,7 @@ export class Pomodoro {
 
 	private _timer: Timer;
 
-	constructor(public workTime: number = 25, public pauseTime: number = 5) {
+	constructor(public workTime: number = 25 * 60, public pauseTime: number = 5 * 60) {
 		// create status bar items
         if (!this._statusBarText) {
             this._statusBarText = window.createStatusBarItem(StatusBarAlignment.Left);
@@ -124,7 +124,7 @@ export class Pomodoro {
 
 	public reset() {
 		this.stop();
-		this._timer.currentTime = 25 * 60;
+		this._timer.currentTime = this.workTime;
 		this.draw();
 	}
 
@@ -171,7 +171,7 @@ export class Pomodoro {
 		this._statusBarText.show();
 	}
 
-	dispose() {
+	public dispose() {
 		this.stop();
         this._statusBarText.dispose();
 		this._statusBarStartButton.dispose();

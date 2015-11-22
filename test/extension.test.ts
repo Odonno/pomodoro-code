@@ -108,20 +108,20 @@ suite("Extension Tests", () => {
 			
 			// assert			
 			assert.equal(PomodoroStatus.None, pomodoro.status);
-			assert.equal(25, pomodoro.workTime);
-			assert.equal(5, pomodoro.pauseTime);
+			assert.equal(25 * 60, pomodoro.workTime);
+			assert.equal(5 * 60, pomodoro.pauseTime);
 			done();
 		});
 		
 		test("A new Pomodoro with time values should override them", (done) => {
 			// arrange
-			let pomodoro = new Pomodoro(33, 12);
+			let pomodoro = new Pomodoro(33 * 60, 12 * 60);
 			
 			// act
 			
 			// assert
-			assert.equal(33, pomodoro.workTime);
-			assert.equal(12, pomodoro.pauseTime);
+			assert.equal(33 * 60, pomodoro.workTime);
+			assert.equal(12 * 60, pomodoro.pauseTime);
 			done();
 		});
 	});
