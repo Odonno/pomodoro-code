@@ -136,6 +136,20 @@ suite("Extension Tests", () => {
 			assert.equal(PomodoroStatus.Work, pomodoro.status);
 			done();
 		});
+		
+		test("Waiting until work timer is over should switch to pause", (done) => {
+			// arrange
+			let pomodoro = new Pomodoro(1, 5);
+			pomodoro.start();
+			assert.equal(PomodoroStatus.Work, pomodoro.status);
+			
+			// act
+			// assert
+			setTimeout(() => {
+				assert.equal(PomodoroStatus.Pause, pomodoro.status);
+				done();
+			}, 1000); // after 1 second
+		});
 	});
 
 });
