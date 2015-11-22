@@ -14,9 +14,7 @@ export function activate(context: ExtensionContext) {
 	console.log('Congratulations, your extension "pomodoro-code" is now active!');
 
 	// create variables
-	let userHome = process.env[(process.platform == 'win32' ? 'USERPROFILE' : 'HOME')];
-	let configRelativeUri = '/.vscode/extensions/odonno.pomodoro-code/out/config.json';
-	let configFileUri = userHome + configRelativeUri;
+	let configFileUri = context.extensionPath + '/out/config.json';
 
 	// read config file
 	let config = fs.readFileSync(configFileUri, 'utf8');
