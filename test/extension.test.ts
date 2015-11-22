@@ -124,6 +124,18 @@ suite("Extension Tests", () => {
 			assert.equal(12 * 60, pomodoro.pauseTime);
 			done();
 		});
+		
+		test("Starting a Pomodoro should update status", (done) => {
+			// arrange
+			let pomodoro = new Pomodoro();
+			
+			// act
+			pomodoro.start();
+			
+			// assert
+			assert.equal(PomodoroStatus.Work, pomodoro.status);
+			done();
+		});
 	});
 
 });
