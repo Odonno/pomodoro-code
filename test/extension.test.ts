@@ -9,7 +9,9 @@ import * as assert from 'assert';
 // You can import and use all API from the 'vscode' module
 // as well as import your extension to test it
 import * as vscode from 'vscode';
-import {Timer, Pomodoro, PomodoroStatus} from '../src/extension';
+import PomodoroStatus = require('../src/pomodoroStatus');
+import Timer = require('../src/timer');
+import Pomodoro = require('../src/pomodoro');
 
 // Defines a Mocha test suite to group tests of similar kind together
 suite("Extension Tests", () => {
