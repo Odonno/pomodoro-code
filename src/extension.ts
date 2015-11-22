@@ -41,6 +41,7 @@ export function activate(context: ExtensionContext) {
 		workspace.openTextDocument(configFileUri)
 			.then((document) => {
 				window.showTextDocument(document);
+				window.showInformationMessage("Once you have made the change, please restart.");
 			});
     });
 	
