@@ -21,8 +21,8 @@ export function activate(context: ExtensionContext) {
 	let config = fs.readFileSync(configFileUri, 'utf8');
 	config = JSON.parse(config);
 
-	// initialize a new Pomodoro manager
-	let pomodoro = new Pomodoro();
+	// create a new Pomodoro
+	let pomodoro = new Pomodoro(config.work * 60, config.pause * 60);
 
 	// list of commands
 	let startDisposable = commands.registerCommand('extension.startPomodoro', () => {
@@ -68,7 +68,7 @@ export class Pomodoro {
 
 	private _timer: Timer;
 
-	constructor() {
+	constructor(public workTime: number = 25, public pauseTime: number = 5) {
 		// create status bar items
         if (!this._statusBarText) {
             this._statusBarText = window.createStatusBarItem(StatusBarAlignment.Left);
@@ -96,14 +96,14 @@ export class Pomodoro {
 		if (status == PomodoroStatus.Work) {
 			this.status = status;
 			this.toggleButtons();
-			this._timer.start(25 * 60, () => {
+			this._timer.start(this.workTime, () => {
 				this.update();
 				this.draw();
 			});
 		} else if (status == PomodoroStatus.Pause) {
 			this.status = status;
 			this.toggleButtons();
-			this._timer.start(5 * 60, () => {
+			this._timer.start(this.pauseTime, () => {
 				this.update();
 				this.draw();
 			});

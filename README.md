@@ -22,6 +22,18 @@ It also contains buttons to start or stop Pomodoro.
 
 When Work/Pause timer is over, it alerts you by showing you a pop-up.
 
+## Configuration file
+
+The configuration file is a simple json object contained in `config.json`. 
+It will provide you a way to change Pomodoro as you want, see an example :
+
+```
+{
+	"work": 25,
+	"pause": 5	
+}
+```
+
 ## Credits
 
 Thanks [José Campos](https://thenounproject.com/jcampos/) to let me use the Pomodoro icon.
