@@ -8,7 +8,7 @@ import Timer = require('./timer');
 class Pomodoro {
 	private _statusBarText: StatusBarItem;
 	private _statusBarStartButton: StatusBarItem;
-	private _statusBarStopButton: StatusBarItem;
+	private _statusBarPauseButton: StatusBarItem;
 
 	private _status: PomodoroStatus;
 	public get status() {
@@ -36,11 +36,11 @@ class Pomodoro {
 			this._statusBarStartButton.command = 'extension.startPomodoro';
 			this._statusBarStartButton.tooltip = 'Start Pomodoro';
         }
-		if (!this._statusBarStopButton) {
-            this._statusBarStopButton = window.createStatusBarItem(StatusBarAlignment.Left);
-			this._statusBarStopButton.text = '$(primitive-square)';
-			this._statusBarStopButton.command = 'extension.stopPomodoro';
-			this._statusBarStopButton.tooltip = 'Stop Pomodoro';
+		if (!this._statusBarPauseButton) {
+            this._statusBarPauseButton = window.createStatusBarItem(StatusBarAlignment.Left);
+			this._statusBarPauseButton.text = '$(primitive-square)';
+			this._statusBarPauseButton.command = 'extension.pausePomodoro';
+			this._statusBarPauseButton.tooltip = 'Pause Pomodoro';
         }
 
 		this.status = PomodoroStatus.None;
@@ -70,16 +70,27 @@ class Pomodoro {
 		this.draw();
 	}
 
-	public stop() {
-		this._timer.stop();
-		this.status = PomodoroStatus.None;
+	public pause() {
+		this.stop();
+		this.status = PomodoroStatus.Wait;
 		this.draw();
 	}
-
+	
 	public reset() {
 		this.stop();
+		this.status = PomodoroStatus.None;
 		this._timer.currentTime = this.workTime;
 		this.draw();
+	}
+	
+	private done() {
+		this.stop();
+		this.status = PomodoroStatus.Done;
+		this.draw();
+	}
+	
+	private stop() {
+		this._timer.stop();
 	}
 
 	private update() {
@@ -87,11 +98,11 @@ class Pomodoro {
 		if (this._timer.currentTime <= 0) {
 			if (this.status == PomodoroStatus.Work) {
 				window.showInformationMessage('Work done ! Take a break. :)');
-				this.stop();
+				this.pause();
 				this.start(PomodoroStatus.Pause);
 			} else if (this.status == PomodoroStatus.Pause) {
 				window.showInformationMessage('Pause is over ! :(');
-				this.stop();
+				this.done();
 			}
 		}
 	}
@@ -114,22 +125,22 @@ class Pomodoro {
 
 	private toggleButtons() {
 		// update status bar (visibility)
-		if (this.status == PomodoroStatus.None) {
+		if (this.status == PomodoroStatus.None || this.status == PomodoroStatus.Wait) {
 			this._statusBarStartButton.show();
-			this._statusBarStopButton.hide();
+			this._statusBarPauseButton.hide();
 		} else {
 			this._statusBarStartButton.hide();
-			this._statusBarStopButton.show();
+			this._statusBarPauseButton.show();
 		}
 
 		this._statusBarText.show();
 	}
 
 	public dispose() {
-		this.stop();
+		this.reset();
         this._statusBarText.dispose();
 		this._statusBarStartButton.dispose();
-		this._statusBarStopButton.dispose();
+		this._statusBarPauseButton.dispose();
     }
 }
 

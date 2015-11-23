@@ -166,7 +166,7 @@ suite("Extension Tests", () => {
 			}, 1000); // after 1 second
 		});
 
-		test("Waiting until pause timer is over should end timer", (done) => {
+		test("Waiting until pause timer is over should switch to done", (done) => {
 			// arrange
 			let pomodoro = new Pomodoro(1, 1);
 			pomodoro.start();
@@ -176,14 +176,14 @@ suite("Extension Tests", () => {
 			setTimeout(() => {
 				assert.equal(PomodoroStatus.Pause, pomodoro.status);
 				setTimeout(() => {
-					assert.equal(PomodoroStatus.None, pomodoro.status);
+					assert.equal(PomodoroStatus.Done, pomodoro.status);
 					assert.equal(false, pomodoro.timer.isRunning);
 					done();
 				}, 1000); // after another 1 second
 			}, 1000); // after 1 second
 		});
 
-		test("Stopping a working Pomodoro should update status", (done) => {
+		test("Pausing a working Pomodoro should switch to wait", (done) => {
 			// arrange
 			let pomodoro = new Pomodoro();
 			pomodoro.start();
@@ -191,8 +191,8 @@ suite("Extension Tests", () => {
 			// act
 			// assert
 			setTimeout(() => {
-				pomodoro.stop();
-				assert.equal(PomodoroStatus.None, pomodoro.status);
+				pomodoro.pause();
+				assert.equal(PomodoroStatus.Wait, pomodoro.status);
 				assert.equal(25 * 60 - 1, pomodoro.timer.currentTime);
 				assert.equal(false, pomodoro.timer.isRunning);
 				done();
@@ -225,7 +225,7 @@ suite("Extension Tests", () => {
 			setTimeout(() => {
 				pomodoro.dispose();
 				assert.equal(PomodoroStatus.None, pomodoro.status);
-				assert.equal(25 * 60 - 1, pomodoro.timer.currentTime);
+				assert.equal(25 * 60, pomodoro.timer.currentTime);
 				assert.equal(false, pomodoro.timer.isRunning);
 				done();
 			}, 1000); // after 1 second

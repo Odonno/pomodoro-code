@@ -1,7 +1,9 @@
 enum PomodoroStatus {
 	None,
 	Work,
-	Pause
+	Pause,
+	Wait,
+	Done
 }
 
 export = PomodoroStatus

@@ -28,8 +28,8 @@ export function activate(context: ExtensionContext) {
         pomodoro.start();
     });
 
-	let stopDisposable = commands.registerCommand('extension.stopPomodoro', () => {
-        pomodoro.stop();
+	let stopDisposable = commands.registerCommand('extension.pausePomodoro', () => {
+        pomodoro.pause();
     });
 
 	let resetDisposable = commands.registerCommand('extension.resetPomodoro', () => {

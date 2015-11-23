@@ -10,7 +10,7 @@ There is a list of commands you can use in VS Code :
 
 * Start Pomodoro
     * Start a new Pomodoro
-* Stop Pomodoro
+* Pause Pomodoro
     * Pause the current Pomodoro and wait
 * Reset Pomodoro
     * Stop the existing Pomodoro and wait to start with a fresh new one
