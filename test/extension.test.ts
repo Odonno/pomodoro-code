@@ -105,6 +105,21 @@ suite("Extension Tests", () => {
 				done();
 			}, 1000); // after 1 second	
 		});
+		
+		test("Reset a timer should stop", (done) => {
+			// arrange
+			let timer = new Timer();
+			
+			// act
+			timer.start(5, () => { });
+			
+			// assert
+			setTimeout(() => {
+				timer.reset();
+				assert.equal(false, timer.isRunning);
+				done();
+			}, 1000); // after 1 second	
+		});
 	});
 
 	suite("Pomodoro Tests", () => {

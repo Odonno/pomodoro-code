@@ -7,6 +7,10 @@ class Timer {
 	constructor(public currentTime: number = 0, public interval: number = 1000) {
 		this._timerId = 0;
 	}
+	
+	public reset() {
+		this.stop();
+	}
 
 	public start(time: number, callback) {
 		if (this._timerId == 0) {
