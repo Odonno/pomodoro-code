@@ -115,8 +115,23 @@ suite("Extension Tests", () => {
 			
 			// assert
 			setTimeout(() => {
-				timer.reset();
+				timer.reset(5);
 				assert.equal(false, timer.isRunning);
+				done();
+			}, 1000); // after 1 second	
+		});
+		
+		test("Reset a timer should set current time", (done) => {
+			// arrange
+			let timer = new Timer();
+			
+			// act
+			timer.start(5, () => { });
+			
+			// assert
+			setTimeout(() => {
+				timer.reset(5);
+				assert.equal(5, timer.currentTime);
 				done();
 			}, 1000); // after 1 second	
 		});

@@ -8,8 +8,9 @@ class Timer {
 		this._timerId = 0;
 	}
 	
-	public reset() {
+	public reset(time: number) {
 		this.stop();
+		this.currentTime = time;
 	}
 
 	public start(time: number, callback) {
