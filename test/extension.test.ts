@@ -260,6 +260,25 @@ suite("Extension Tests", () => {
 				done();
 			}, 1000); // after 1 second
 		});
+		
+		test("Starting again a Pomodoro after a pause should switch to work", (done) => {
+			// arrange
+			let pomodoro = new Pomodoro();
+			pomodoro.start();
+			
+			// act
+			// assert
+			setTimeout(() => {
+				pomodoro.pause();
+				pomodoro.start();
+				setTimeout(() => {
+					assert.equal(PomodoroStatus.Work, pomodoro.status);
+					assert.equal(25 * 60 - 2, pomodoro.timer.currentTime);
+					assert.equal(true, pomodoro.timer.isRunning);
+					done();
+				}, 1000); // after another 1 second
+			}, 1000); // after 1 second
+		});
 	});
 
 });
