@@ -52,14 +52,16 @@ class Pomodoro {
 		if (status == PomodoroStatus.Work) {
 			this.status = status;
 			this.toggleButtons();
-			this._timer.start(this.workTime, () => {
+			this.timer.reset(this.workTime);
+			this._timer.start(() => {
 				this.update();
 				this.draw();
 			});
 		} else if (status == PomodoroStatus.Pause) {
 			this.status = status;
 			this.toggleButtons();
-			this._timer.start(this.pauseTime, () => {
+			this.timer.reset(this.pauseTime);
+			this._timer.start(() => {
 				this.update();
 				this.draw();
 			});

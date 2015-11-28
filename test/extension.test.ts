@@ -32,10 +32,10 @@ suite("Extension Tests", () => {
 
 		test("Start a timer should set current time", (done) => {
 			// arrange
-			let timer = new Timer();
+			let timer = new Timer(1);
 			
 			// act
-			timer.start(1, () => { });
+			timer.start(() => { });
 			
 			// assert			
 			assert.equal(1, timer.currentTime);
@@ -45,11 +45,11 @@ suite("Extension Tests", () => {
 
 		test("Start a timer twice should not override the first timer", (done) => {
 			// arrange
-			let timer = new Timer();
+			let timer = new Timer(1);
 			
 			// act
-			timer.start(1, () => { });
-			timer.start(5, () => { });
+			timer.start(() => { });
+			timer.start(() => { });
 			
 			// assert			
 			assert.equal(1, timer.currentTime);
@@ -59,10 +59,10 @@ suite("Extension Tests", () => {
 
 		test("A timer should tick at least once", (done) => {
 			// arrange
-			let timer = new Timer();
+			let timer = new Timer(5);
 			
 			// act
-			timer.start(5, () => { });
+			timer.start(() => { });
 			
 			// assert
 			setTimeout(() => {
@@ -74,11 +74,11 @@ suite("Extension Tests", () => {
 
 		test("A timer should execute callback each tick", (done) => {
 			// arrange
-			let timer = new Timer();
+			let timer = new Timer(5);
 			let ticks = 0;
 			
 			// act
-			timer.start(5, () => {
+			timer.start(() => {
 				ticks++;
 			});
 			
@@ -92,10 +92,10 @@ suite("Extension Tests", () => {
 
 		test("A stopped timer should not tick", (done) => {
 			// arrange
-			let timer = new Timer();
+			let timer = new Timer(5);
 			
 			// act
-			timer.start(5, () => { });
+			timer.start(() => { });
 			timer.stop();
 			
 			// assert
@@ -108,10 +108,10 @@ suite("Extension Tests", () => {
 		
 		test("Reset a timer should stop", (done) => {
 			// arrange
-			let timer = new Timer();
+			let timer = new Timer(5);
 			
 			// act
-			timer.start(5, () => { });
+			timer.start(() => { });
 			
 			// assert
 			setTimeout(() => {
@@ -123,10 +123,10 @@ suite("Extension Tests", () => {
 		
 		test("Reset a timer should set current time", (done) => {
 			// arrange
-			let timer = new Timer();
+			let timer = new Timer(5);
 			
 			// act
-			timer.start(5, () => { });
+			timer.start(() => { });
 			
 			// assert
 			setTimeout(() => {

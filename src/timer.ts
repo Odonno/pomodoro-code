@@ -13,10 +13,8 @@ class Timer {
 		this.currentTime = time;
 	}
 
-	public start(time: number, callback) {
+	public start(callback) {
 		if (this._timerId == 0) {
-			this.currentTime = time;
-
 			this._timerId = setInterval(() => {
 				this.tick();
 				callback();
