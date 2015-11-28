@@ -49,20 +49,9 @@ class Pomodoro {
 	}
 
 	public start(status: PomodoroStatus = PomodoroStatus.Work) {
-		if (status == PomodoroStatus.Work) {
+		if (status == PomodoroStatus.Work || status == PomodoroStatus.Pause) {
 			if (this.status != PomodoroStatus.Wait)
-				this.timer.reset(this.workTime);
-
-			this.status = status;
-			this.toggleButtons();
-
-			this._timer.start(() => {
-				this.update();
-				this.draw();
-			});
-		} else if (status == PomodoroStatus.Pause) {
-			if (this.status != PomodoroStatus.Wait)
-				this.timer.reset(this.pauseTime);
+				this.resetTimer(status);
 
 			this.status = status;
 			this.toggleButtons();
@@ -128,6 +117,15 @@ class Pomodoro {
 		}
 
 		this._statusBarText.text = timerPart + statusPart;
+	}
+
+	private resetTimer(status: PomodoroStatus) {
+		if (status == PomodoroStatus.Work) {
+			this.timer.reset(this.workTime);
+		}
+		if (status == PomodoroStatus.Pause) {
+			this.timer.reset(this.pauseTime);
+		}
 	}
 
 	private toggleButtons() {
