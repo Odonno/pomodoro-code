@@ -1,53 +1,58 @@
 // the module 'vscode' contains the VS Code extensibility API
 // import the module and reference it with the alias vscode in your code below
 import {workspace, window, commands, Disposable, ExtensionContext, StatusBarAlignment, StatusBarItem, TextDocument} from 'vscode';
-import Pomodoro = require('./pomodoro');
+import PomodoroManager = require('./pomodoroManager');
 
-var fs = require('fs');
+import * as fs from 'fs';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: ExtensionContext) {
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "pomodoro-code" is now active!');
+    // Use the console to output diagnostic information (console.log) and errors (console.error)
+    // This line of code will only be executed once when your extension is activated
+    console.log('Congratulations, your extension "pomodoro-code" is now active!');
 
-	// create variables
-	let configFileUri = context.extensionPath + '/out/config.json';
+    // read config file to create a new Pomodoro Manager
+    let configFilePath = context.extensionPath + '/out/config.json';
+    let pomodoroManager: PomodoroManager;
 
-	// read config file
-	let config = fs.readFileSync(configFileUri, 'utf8');
-	config = JSON.parse(config);
+    fs.access(configFilePath, fs.F_OK, function(err) {
+        // create Pomodoro Manager with list of Pomodoro
+        let pomodori: any[];
 
-	// create a new Pomodoro
-	let pomodoro = new Pomodoro(config.work * 60, config.pause * 60);
+        if (!err) {
+            pomodori = JSON.parse(fs.readFileSync(configFilePath, 'utf8'));
+        }
 
-	// list of commands
-	let startDisposable = commands.registerCommand('extension.startPomodoro', () => {
-        pomodoro.start();
+        pomodoroManager = new PomodoroManager(pomodori);
     });
 
-	let stopDisposable = commands.registerCommand('extension.pausePomodoro', () => {
-        pomodoro.pause();
+    // list of commands
+    let startDisposable = commands.registerCommand('extension.startPomodoro', () => {
+        pomodoroManager.start();
     });
 
-	let resetDisposable = commands.registerCommand('extension.resetPomodoro', () => {
-        pomodoro.reset();
+    let stopDisposable = commands.registerCommand('extension.pausePomodoro', () => {
+        pomodoroManager.pause();
     });
 
-	let configureDisposable = commands.registerCommand('extension.configurePomodoro', () => {
-		workspace.openTextDocument(configFileUri)
-			.then((document) => {
-				window.showTextDocument(document);
-				window.showInformationMessage("Once you have made the change, please restart.");
-			});
+    let resetDisposable = commands.registerCommand('extension.resetPomodoro', () => {
+        pomodoroManager.reset();
     });
-	
-	// Add to a list of disposables which are disposed when this extension is deactivated.
-    context.subscriptions.push(pomodoro);
-	context.subscriptions.push(startDisposable);
-	context.subscriptions.push(stopDisposable);
-	context.subscriptions.push(resetDisposable);
-	context.subscriptions.push(configureDisposable);
+
+    let configureDisposable = commands.registerCommand('extension.configurePomodoro', () => {
+        workspace.openTextDocument(configFilePath)
+            .then((document) => {
+                window.showTextDocument(document);
+                window.showInformationMessage("Once you have made the change, please restart.");
+            });
+    });
+
+    // Add to a list of disposables which are disposed when this extension is deactivated.
+    context.subscriptions.push(pomodoroManager);
+    context.subscriptions.push(startDisposable);
+    context.subscriptions.push(stopDisposable);
+    context.subscriptions.push(resetDisposable);
+    context.subscriptions.push(configureDisposable);
 }

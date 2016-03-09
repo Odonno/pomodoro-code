@@ -16,269 +16,272 @@ import Pomodoro = require('../src/pomodoro');
 // Defines a Mocha test suite to group tests of similar kind together
 suite("Extension Tests", () => {
 
-	suite("Timer Tests", () => {
-		test("A new timer should have default values", (done) => {
-			// arrange
-			let timer = new Timer();
-			
-			// act
-			
-			// assert			
-			assert.equal(0, timer.currentTime);
-			assert.equal(1000, timer.interval);
-			assert.equal(false, timer.isRunning);
-			done();
-		});
+    suite("Timer Tests", () => {
+        test("A new timer should have default values", (done) => {
+            // arrange
+            let timer = new Timer();
 
-		test("Start a timer should set current time", (done) => {
-			// arrange
-			let timer = new Timer(1);
-			
-			// act
-			timer.start(() => { });
-			
-			// assert			
-			assert.equal(1, timer.currentTime);
-			assert.equal(true, timer.isRunning);
-			done();
-		});
+            // act
 
-		test("Start a timer twice should not override the first timer", (done) => {
-			// arrange
-			let timer = new Timer(1);
-			
-			// act
-			timer.start(() => { });
-			timer.start(() => { });
-			
-			// assert			
-			assert.equal(1, timer.currentTime);
-			assert.equal(true, timer.isRunning);
-			done();
-		});
+            // assert			
+            assert.equal(0, timer.currentTime);
+            assert.equal(1000, timer.interval);
+            assert.equal(false, timer.isRunning);
+            done();
+        });
 
-		test("A timer should tick at least once", (done) => {
-			// arrange
-			let timer = new Timer(5);
-			
-			// act
-			timer.start(() => { });
-			
-			// assert
-			setTimeout(() => {
-				assert.equal(4, timer.currentTime);
-				assert.equal(true, timer.isRunning);
-				done();
-			}, 1000); // after 1 second	
-		});
+        test("Start a timer should set current time", (done) => {
+            // arrange
+            let timer = new Timer(1);
 
-		test("A timer should execute callback each tick", (done) => {
-			// arrange
-			let timer = new Timer(5);
-			let ticks = 0;
-			
-			// act
-			timer.start(() => {
-				ticks++;
-			});
-			
-			// assert
-			setTimeout(() => {
-				assert.equal(1, ticks);
-				assert.equal(true, timer.isRunning);
-				done();
-			}, 1000); // after 1 second	
-		});
+            // act
+            timer.start(() => { });
 
-		test("A stopped timer should not tick", (done) => {
-			// arrange
-			let timer = new Timer(5);
-			
-			// act
-			timer.start(() => { });
-			timer.stop();
-			
-			// assert
-			setTimeout(() => {
-				assert.equal(5, timer.currentTime);
-				assert.equal(false, timer.isRunning);
-				done();
-			}, 1000); // after 1 second	
-		});
-		
-		test("Reset a timer should stop", (done) => {
-			// arrange
-			let timer = new Timer(5);
-			
-			// act
-			timer.start(() => { });
-			
-			// assert
-			setTimeout(() => {
-				timer.reset(5);
-				assert.equal(false, timer.isRunning);
-				done();
-			}, 1000); // after 1 second	
-		});
-		
-		test("Reset a timer should set current time", (done) => {
-			// arrange
-			let timer = new Timer(5);
-			
-			// act
-			timer.start(() => { });
-			
-			// assert
-			setTimeout(() => {
-				timer.reset(5);
-				assert.equal(5, timer.currentTime);
-				done();
-			}, 1000); // after 1 second	
-		});
-	});
+            // assert			
+            assert.equal(1, timer.currentTime);
+            assert.equal(true, timer.isRunning);
+            done();
+        });
 
-	suite("Pomodoro Tests", () => {
-		test("A new Pomodoro should have default values", (done) => {
-			// arrange
-			let pomodoro = new Pomodoro();
-			
-			// act
-			
-			// assert			
-			assert.equal(PomodoroStatus.None, pomodoro.status);
-			assert.equal(25 * 60, pomodoro.workTime);
-			assert.equal(5 * 60, pomodoro.pauseTime);
-			assert.equal(0, pomodoro.timer.currentTime);
-			assert.equal(false, pomodoro.timer.isRunning);
-			done();
-		});
+        test("Start a timer twice should not override the first timer", (done) => {
+            // arrange
+            let timer = new Timer(1);
 
-		test("A new Pomodoro with time values should override them", (done) => {
-			// arrange
-			let pomodoro = new Pomodoro(33 * 60, 12 * 60);
-			
-			// act
-			
-			// assert
-			assert.equal(33 * 60, pomodoro.workTime);
-			assert.equal(12 * 60, pomodoro.pauseTime);
-			done();
-		});
+            // act
+            timer.start(() => { });
+            timer.start(() => { });
 
-		test("Starting a Pomodoro should update status", (done) => {
-			// arrange
-			let pomodoro = new Pomodoro();
-			
-			// act
-			pomodoro.start();
-			
-			// assert
-			assert.equal(PomodoroStatus.Work, pomodoro.status);
-			assert.equal(25 * 60, pomodoro.timer.currentTime);
-			assert.equal(true, pomodoro.timer.isRunning);
-			done();
-		});
+            // assert			
+            assert.equal(1, timer.currentTime);
+            assert.equal(true, timer.isRunning);
+            done();
+        });
 
-		test("Waiting until work timer is over should switch to pause", (done) => {
-			// arrange
-			let pomodoro = new Pomodoro(1, 5);
-			pomodoro.start();
-			assert.equal(PomodoroStatus.Work, pomodoro.status);
-			assert.equal(1, pomodoro.timer.currentTime);
-			
-			// act
-			// assert
-			setTimeout(() => {
-				assert.equal(PomodoroStatus.Pause, pomodoro.status);
-				assert.equal(5, pomodoro.timer.currentTime);
-				assert.equal(true, pomodoro.timer.isRunning);
-				done();
-			}, 1000); // after 1 second
-		});
+        test("A timer should tick at least once", (done) => {
+            // arrange
+            let timer = new Timer(5);
 
-		test("Waiting until pause timer is over should switch to done", (done) => {
-			// arrange
-			let pomodoro = new Pomodoro(1, 1);
-			pomodoro.start();
-			
-			// act
-			// assert
-			setTimeout(() => {
-				assert.equal(PomodoroStatus.Pause, pomodoro.status);
-				setTimeout(() => {
-					assert.equal(PomodoroStatus.Done, pomodoro.status);
-					assert.equal(false, pomodoro.timer.isRunning);
-					done();
-				}, 1000); // after another 1 second
-			}, 1000); // after 1 second
-		});
+            // act
+            timer.start(() => { });
 
-		test("Pausing a working Pomodoro should switch to wait", (done) => {
-			// arrange
-			let pomodoro = new Pomodoro();
-			pomodoro.start();
-			
-			// act
-			// assert
-			setTimeout(() => {
-				pomodoro.pause();
-				assert.equal(PomodoroStatus.Wait, pomodoro.status);
-				assert.equal(25 * 60 - 1, pomodoro.timer.currentTime);
-				assert.equal(false, pomodoro.timer.isRunning);
-				done();
-			}, 1000); // after 1 second
-		});
+            // assert
+            setTimeout(() => {
+                assert.equal(4, timer.currentTime);
+                assert.equal(true, timer.isRunning);
+                done();
+            }, 1000); // after 1 second	
+        });
 
-		test("Resetting a working Pomodoro should stop Pomodoro and put default time", (done) => {
-			// arrange
-			let pomodoro = new Pomodoro();
-			pomodoro.start();
-			
-			// act
-			// assert
-			setTimeout(() => {
-				pomodoro.reset();
-				assert.equal(PomodoroStatus.None, pomodoro.status);
-				assert.equal(25 * 60, pomodoro.timer.currentTime);
-				assert.equal(false, pomodoro.timer.isRunning);
-				done();
-			}, 1000); // after 1 second
-		});
+        test("A timer should execute callback each tick", (done) => {
+            // arrange
+            let timer = new Timer(5);
+            let ticks = 0;
 
-		test("Disposing a working Pomodoro should stop Pomodoro", (done) => {
-			// arrange
-			let pomodoro = new Pomodoro();
-			pomodoro.start();
-			
-			// act
-			// assert
-			setTimeout(() => {
-				pomodoro.dispose();
-				assert.equal(PomodoroStatus.None, pomodoro.status);
-				assert.equal(25 * 60, pomodoro.timer.currentTime);
-				assert.equal(false, pomodoro.timer.isRunning);
-				done();
-			}, 1000); // after 1 second
-		});
-		
-		test("Starting again a Pomodoro after a pause should switch to work", (done) => {
-			// arrange
-			let pomodoro = new Pomodoro();
-			pomodoro.start();
-			
-			// act
-			// assert
-			setTimeout(() => {
-				pomodoro.pause();
-				pomodoro.start();
-				setTimeout(() => {
-					assert.equal(PomodoroStatus.Work, pomodoro.status);
-					assert.equal(25 * 60 - 2, pomodoro.timer.currentTime);
-					assert.equal(true, pomodoro.timer.isRunning);
-					done();
-				}, 1000); // after another 1 second
-			}, 1000); // after 1 second
-		});
-	});
+            // act
+            timer.start(() => {
+                ticks++;
+            });
+
+            // assert
+            setTimeout(() => {
+                assert.equal(1, ticks);
+                assert.equal(true, timer.isRunning);
+                done();
+            }, 1000); // after 1 second	
+        });
+
+        test("A stopped timer should not tick", (done) => {
+            // arrange
+            let timer = new Timer(5);
+
+            // act
+            timer.start(() => { });
+            timer.stop();
+
+            // assert
+            setTimeout(() => {
+                assert.equal(5, timer.currentTime);
+                assert.equal(false, timer.isRunning);
+                done();
+            }, 1000); // after 1 second	
+        });
+
+        test("Reset a timer should stop", (done) => {
+            // arrange
+            let timer = new Timer(5);
+
+            // act
+            timer.start(() => { });
+
+            // assert
+            setTimeout(() => {
+                timer.reset(5);
+                assert.equal(false, timer.isRunning);
+                done();
+            }, 1000); // after 1 second	
+        });
+
+        test("Reset a timer should set current time", (done) => {
+            // arrange
+            let timer = new Timer(5);
+
+            // act
+            timer.start(() => { });
+
+            // assert
+            setTimeout(() => {
+                timer.reset(5);
+                assert.equal(5, timer.currentTime);
+                done();
+            }, 1000); // after 1 second	
+        });
+    });
+
+    suite("Pomodoro Tests", () => {
+        test("A new Pomodoro should have default values", (done) => {
+            // arrange
+            let pomodoro = new Pomodoro();
+
+            // act
+
+            // assert			
+            assert.equal(PomodoroStatus.None, pomodoro.status);
+            assert.equal(25 * 60, pomodoro.workTime);
+            assert.equal(5 * 60, pomodoro.pauseTime);
+            assert.equal(0, pomodoro.timer.currentTime);
+            assert.equal(false, pomodoro.timer.isRunning);
+            done();
+        });
+
+        test("A new Pomodoro with time values should override them", (done) => {
+            // arrange
+            let pomodoro = new Pomodoro(33 * 60, 12 * 60);
+
+            // act
+
+            // assert
+            assert.equal(33 * 60, pomodoro.workTime);
+            assert.equal(12 * 60, pomodoro.pauseTime);
+            done();
+        });
+
+        test("Starting a Pomodoro should update status", (done) => {
+            // arrange
+            let pomodoro = new Pomodoro();
+
+            // act
+            pomodoro.start();
+
+            // assert
+            assert.equal(PomodoroStatus.Work, pomodoro.status);
+            assert.equal(25 * 60, pomodoro.timer.currentTime);
+            assert.equal(true, pomodoro.timer.isRunning);
+            done();
+        });
+
+        test("Waiting until work timer is over should switch to pause", (done) => {
+            // arrange
+            let pomodoro = new Pomodoro(1, 5);
+            pomodoro.start();
+            assert.equal(PomodoroStatus.Work, pomodoro.status);
+            assert.equal(1, pomodoro.timer.currentTime);
+
+            // act
+            // assert
+            setTimeout(() => {
+                assert.equal(PomodoroStatus.Pause, pomodoro.status);
+                assert.equal(5, pomodoro.timer.currentTime);
+                assert.equal(true, pomodoro.timer.isRunning);
+                done();
+            }, 1000); // after 1 second
+        });
+
+        test("Waiting until pause timer is over should switch to done", (done) => {
+            // arrange
+            let pomodoro = new Pomodoro(1, 1);
+            pomodoro.start();
+
+            // act
+            // assert
+            setTimeout(() => {
+                assert.equal(PomodoroStatus.Pause, pomodoro.status);
+                setTimeout(() => {
+                    assert.equal(PomodoroStatus.Done, pomodoro.status);
+                    assert.equal(false, pomodoro.timer.isRunning);
+                    done();
+                }, 1000); // after another 1 second
+            }, 1000); // after 1 second
+        });
+
+        test("Pausing a working Pomodoro should switch to wait", (done) => {
+            // arrange
+            let pomodoro = new Pomodoro();
+            pomodoro.start();
+
+            // act
+            // assert
+            setTimeout(() => {
+                pomodoro.pause();
+                assert.equal(PomodoroStatus.Wait, pomodoro.status);
+                assert.equal(25 * 60 - 1, pomodoro.timer.currentTime);
+                assert.equal(false, pomodoro.timer.isRunning);
+                done();
+            }, 1000); // after 1 second
+        });
+
+        test("Resetting a working Pomodoro should stop Pomodoro and put default time", (done) => {
+            // arrange
+            let pomodoro = new Pomodoro();
+            pomodoro.start();
+
+            // act
+            // assert
+            setTimeout(() => {
+                pomodoro.reset();
+                assert.equal(PomodoroStatus.None, pomodoro.status);
+                assert.equal(25 * 60, pomodoro.timer.currentTime);
+                assert.equal(false, pomodoro.timer.isRunning);
+                done();
+            }, 1000); // after 1 second
+        });
+
+        test("Disposing a working Pomodoro should stop Pomodoro", (done) => {
+            // arrange
+            let pomodoro = new Pomodoro();
+            pomodoro.start();
+
+            // act
+            // assert
+            setTimeout(() => {
+                pomodoro.dispose();
+                assert.equal(PomodoroStatus.None, pomodoro.status);
+                assert.equal(false, pomodoro.timer.isRunning);
+                done();
+            }, 1000); // after 1 second
+        });
+
+        test("Starting again a Pomodoro after a pause should switch to work", (done) => {
+            // arrange
+            let pomodoro = new Pomodoro();
+            pomodoro.start();
+
+            // act
+            // assert
+            setTimeout(() => {
+                pomodoro.pause();
+                pomodoro.start();
+                setTimeout(() => {
+                    assert.equal(PomodoroStatus.Work, pomodoro.status);
+                    assert.equal(25 * 60 - 2, pomodoro.timer.currentTime);
+                    assert.equal(true, pomodoro.timer.isRunning);
+                    done();
+                }, 1000); // after another 1 second
+            }, 1000); // after 1 second
+        });
+    });
+
+    suite('PomodoroManager tests', () => {
+
+    });
 
 });
