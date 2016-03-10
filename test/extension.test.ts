@@ -12,6 +12,7 @@ import * as vscode from 'vscode';
 import PomodoroStatus = require('../src/pomodoroStatus');
 import Timer = require('../src/timer');
 import Pomodoro = require('../src/pomodoro');
+import IPomodoroConfig = require('../src/pomodoroConfig');
 import PomodoroManager = require('../src/pomodoroManager');
 
 // Defines a Mocha test suite to group tests of similar kind together
@@ -282,17 +283,36 @@ suite("Extension Tests", () => {
     });
 
     suite('PomodoroManager tests', () => {
-        test.only("A default PomodoroManager should have a single Pomodoro", (done) => {
-           // arrange
+        test("A default PomodoroManager should have a single Pomodoro", (done) => {
+            // arrange
             let pomodoroManager = new PomodoroManager();
 
             // act
-
             // assert
             assert.equal(pomodoroManager.pomodori.length, 1);
             assert.strictEqual(pomodoroManager.pomodori[0], pomodoroManager.currentPomodoro);
             assert.equal(pomodoroManager.currentPomodoro.workTime, 25 * 60);
             assert.equal(pomodoroManager.currentPomodoro.pauseTime, 5 * 60);
+            done();
+        });
+
+        test("A custom PomodoroManager should have two Pomodori", (done) => {
+            // arrange
+            let configuration: IPomodoroConfig[] = [
+                {
+                    work: 25,
+                    pause: 5
+                },
+                {
+                    work: 25,
+                    pause: 5
+                }
+            ];
+            let pomodoroManager = new PomodoroManager(configuration);
+
+            // act
+            // assert
+            assert.equal(pomodoroManager.pomodori.length, 2);
             done();
         });
     });

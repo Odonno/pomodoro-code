@@ -42,7 +42,7 @@ class PomodoroManager {
     private initialize() {
         this.pomodori = [];
 
-        if (!this.configuration || typeof (this.configuration) !== 'array' || this.configuration.length < 1) {
+        if (!this.configuration || this.configuration.length < 1) {
             this.pomodori.push(new Pomodoro());
         } else {
             const minutesPerHour = 60;
@@ -73,7 +73,8 @@ class PomodoroManager {
             statusPart += ' (pause)';
         }
 
-        this._statusBarText.text = timerPart + statusPart;    }
+        this._statusBarText.text = timerPart + statusPart;    
+    }
 
     private toggleButtons() {
         // update status bar (visibility)
@@ -86,7 +87,8 @@ class PomodoroManager {
             this._statusBarPauseButton.show();
         }
 
-        this._statusBarText.show();    }
+        this._statusBarText.show();   
+     }
 
     // public methods
     public start() {
