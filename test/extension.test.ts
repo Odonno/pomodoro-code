@@ -345,6 +345,21 @@ suite("Extension Tests", () => {
                 done();
             }, 1000); // after 1 second
         });
+
+        test("Resetting a PomodoroManager should reinitialize PomodoroManager", (done) => {
+            // arrange
+            let pomodoroManager = new PomodoroManager();
+            pomodoroManager.start();
+
+            // act
+            // assert
+            setTimeout(() => {
+                pomodoroManager.reset();
+                assert.equal(PomodoroStatus.None, pomodoroManager.currentPomodoro.status);
+                assert.equal(false, pomodoroManager.currentPomodoro.timer.isRunning);
+                done();
+            }, 1000); // after 1 second
+        });
     });
 
 });

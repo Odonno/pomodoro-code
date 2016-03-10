@@ -34,27 +34,11 @@ class PomodoroManager {
             this._statusBarPauseButton.tooltip = 'Pause Pomodoro';
         }
 
-        this.initialize();
+        this.reset();
         this.draw();
     }
 
     // private methods
-    private initialize() {
-        this.pomodori = [];
-
-        if (!this.configuration || this.configuration.length < 1) {
-            this.pomodori.push(new Pomodoro());
-        } else {
-            const minutesPerHour = 60;
-            for (let i = 0; i < this.configuration.length; i++) {
-                let pomodoro = new Pomodoro(this.configuration[i].work * minutesPerHour, this.configuration[i].pause * minutesPerHour);
-                this.pomodori.push(pomodoro);
-            }
-        }
-
-        this.currentPomodoro = this.pomodori[0];
-    }
-
     private update() {
         // TODO : handle launch of the next Pomodoro
 
@@ -73,7 +57,7 @@ class PomodoroManager {
             statusPart += ' (pause)';
         }
 
-        this._statusBarText.text = timerPart + statusPart;    
+        this._statusBarText.text = timerPart + statusPart;
     }
 
     private toggleButtons() {
@@ -87,8 +71,8 @@ class PomodoroManager {
             this._statusBarPauseButton.show();
         }
 
-        this._statusBarText.show();   
-     }
+        this._statusBarText.show();
+    }
 
     // public methods
     public start() {
@@ -100,7 +84,19 @@ class PomodoroManager {
     }
 
     public reset() {
-        // TODO
+        this.pomodori = [];
+
+        if (!this.configuration || this.configuration.length < 1) {
+            this.pomodori.push(new Pomodoro());
+        } else {
+            const minutesPerHour = 60;
+            for (let i = 0; i < this.configuration.length; i++) {
+                let pomodoro = new Pomodoro(this.configuration[i].work * minutesPerHour, this.configuration[i].pause * minutesPerHour);
+                this.pomodori.push(pomodoro);
+            }
+        }
+
+        this.currentPomodoro = this.pomodori[0];
     }
 
     public dispose() {
@@ -108,7 +104,7 @@ class PomodoroManager {
         this.currentPomodoro.dispose();
 
         // reset Pomodori
-        this.initialize();
+        this.reset();
 
         this._statusBarText.dispose();
         this._statusBarStartButton.dispose();
