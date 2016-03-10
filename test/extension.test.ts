@@ -315,6 +315,20 @@ suite("Extension Tests", () => {
             assert.equal(pomodoroManager.pomodori.length, 2);
             done();
         });
+
+        test.only("Starting a PomodoroManager should update status of the first Pomodoro", (done) => {
+            // arrange
+            let pomodoroManager = new PomodoroManager();
+
+            // act
+            pomodoroManager.start();
+
+            // assert
+            assert.equal(PomodoroStatus.Work, pomodoroManager.currentPomodoro.status);
+            assert.equal(25 * 60, pomodoroManager.currentPomodoro.timer.currentTime);
+            assert.equal(true, pomodoroManager.currentPomodoro.timer.isRunning);
+            done();
+        });
     });
 
 });

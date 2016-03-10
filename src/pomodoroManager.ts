@@ -92,7 +92,7 @@ class PomodoroManager {
 
     // public methods
     public start() {
-        // TODO
+        this.currentPomodoro.start();
     }
 
     public pause() {
