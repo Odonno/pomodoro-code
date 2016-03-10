@@ -61,14 +61,14 @@ class Pomodoro {
         this._timer.stop();
     }
 
-    public done() {
-        this.stop();
-        this.status = PomodoroStatus.Done;
-    }
-
     public dispose() {
         this.stop();
         this.status = PomodoroStatus.None;
+    }
+
+    private done() {
+        this.stop();
+        this.status = PomodoroStatus.Done;
     }
 
     private resetTimer(status: PomodoroStatus) {

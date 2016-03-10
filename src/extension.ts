@@ -1,9 +1,10 @@
 // the module 'vscode' contains the VS Code extensibility API
 // import the module and reference it with the alias vscode in your code below
 import {workspace, window, commands, Disposable, ExtensionContext, StatusBarAlignment, StatusBarItem, TextDocument} from 'vscode';
-import PomodoroManager = require('./pomodoroManager');
-
 import * as fs from 'fs';
+
+import PomodoroManager = require('./pomodoroManager');
+import IPomodoroConfig = require('./pomodoroConfig');
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -19,13 +20,13 @@ export function activate(context: ExtensionContext) {
 
     fs.access(configFilePath, fs.F_OK, function(err) {
         // create Pomodoro Manager with list of Pomodoro
-        let pomodori: any[];
+        let config: IPomodoroConfig[];
 
         if (!err) {
-            pomodori = JSON.parse(fs.readFileSync(configFilePath, 'utf8'));
+            config = JSON.parse(fs.readFileSync(configFilePath, 'utf8'));
         }
 
-        pomodoroManager = new PomodoroManager(pomodori);
+        pomodoroManager = new PomodoroManager(config);
     });
 
     // list of commands

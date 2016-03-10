@@ -2,15 +2,20 @@ import {window, StatusBarAlignment, StatusBarItem} from 'vscode';
 
 import Pomodoro = require('./pomodoro');
 import PomodoroStatus = require('./pomodoroStatus');
+import IPomodoroConfig = require('./pomodoroConfig');
 import Timer = require('./timer');
 
 class PomodoroManager {
+    // logic properties
     private _currentPomodoro: Pomodoro;
+    private _pomodori: Pomodoro[];
+
+    // UI properties
     private _statusBarText: StatusBarItem;
     private _statusBarStartButton: StatusBarItem;
     private _statusBarPauseButton: StatusBarItem;
 
-    constructor(public pomodori?: Pomodoro[]) {
+    constructor(public configuration?: IPomodoroConfig[]) {
         // create status bar items
         if (!this._statusBarText) {
             this._statusBarText = window.createStatusBarItem(StatusBarAlignment.Left);
@@ -29,19 +34,25 @@ class PomodoroManager {
             this._statusBarPauseButton.tooltip = 'Pause Pomodoro';
         }
 
-        if (!pomodori || typeof(pomodori) !== 'array' || pomodori.length < 1) {
-            pomodori = [
-                new Pomodoro()
-            ];
+        this._pomodori = [];
+
+        if (!configuration || typeof (configuration) !== 'array' || configuration.length < 1) {
+            this._pomodori.push(new Pomodoro());
+        } else {
+            const minutesPerHour = 60;
+            for (let i = 0; i < configuration.length; i++) {
+                let pomodoro = new Pomodoro(configuration[i].work * minutesPerHour, configuration[i].pause * minutesPerHour);
+                this._pomodori.push(pomodoro);
+            }
         }
 
-        this._currentPomodoro = pomodori[0];
+        this._currentPomodoro = this._pomodori[0];
         this.draw();
     }
 
     private update() {
         // TODO : handle launch of the next Pomodoro
-        
+
     }
 
     private draw() {
@@ -73,15 +84,15 @@ class PomodoroManager {
 
         this._statusBarText.show();
     }
-    
+
     public start() {
         // TODO
     }
-    
+
     public pause() {
         // TODO
     }
-    
+
     public reset() {
         // TODO
     }
@@ -89,7 +100,7 @@ class PomodoroManager {
     public dispose() {
         // stop current Pomodoro
         this._currentPomodoro.dispose();
-        
+
         // reset Pomodori
 
         this._statusBarText.dispose();
