@@ -4,6 +4,7 @@ import PomodoroStatus = require('./pomodoroStatus');
 import Timer = require('./timer');
 
 class Pomodoro {
+    // properties
     private _status: PomodoroStatus;
     public get status() {
         return this._status;
@@ -16,6 +17,9 @@ class Pomodoro {
     public get timer() {
         return this._timer;
     }
+
+    // events
+    public ontick: { (): void };
 
     constructor(public workTime: number = 25 * 60, public pauseTime: number = 5 * 60) {
         this._timer = new Timer();
@@ -55,6 +59,10 @@ class Pomodoro {
                         window.showInformationMessage('Pause is over ! :(');
                         this.done();
                     }
+                }
+
+                if (this.ontick) {
+                    this.ontick();
                 }
             });
         } else {

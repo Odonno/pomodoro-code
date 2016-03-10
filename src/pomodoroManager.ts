@@ -77,6 +77,10 @@ class PomodoroManager {
     // public methods
     public start() {
         this.currentPomodoro.start();
+        this.currentPomodoro.ontick = () => {
+            this.update();
+            this.draw();
+        };
     }
 
     public pause() {
