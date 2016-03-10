@@ -22,6 +22,22 @@ class Pomodoro {
         this.status = PomodoroStatus.None;
     }
 
+    // private methods
+    private done() {
+        this.stop();
+        this.status = PomodoroStatus.Done;
+    }
+
+    private resetTimer(status: PomodoroStatus) {
+        if (status == PomodoroStatus.Work) {
+            this.timer.reset(this.workTime);
+        }
+        if (status == PomodoroStatus.Pause) {
+            this.timer.reset(this.pauseTime);
+        }
+    }
+
+    // public methods
     public start(status: PomodoroStatus = PomodoroStatus.Work) {
         if (status == PomodoroStatus.Work || status == PomodoroStatus.Pause) {
             if (this.status != PomodoroStatus.Wait)
@@ -64,20 +80,6 @@ class Pomodoro {
     public dispose() {
         this.stop();
         this.status = PomodoroStatus.None;
-    }
-
-    private done() {
-        this.stop();
-        this.status = PomodoroStatus.Done;
-    }
-
-    private resetTimer(status: PomodoroStatus) {
-        if (status == PomodoroStatus.Work) {
-            this.timer.reset(this.workTime);
-        }
-        if (status == PomodoroStatus.Pause) {
-            this.timer.reset(this.pauseTime);
-        }
     }
 }
 

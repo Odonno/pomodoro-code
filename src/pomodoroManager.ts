@@ -15,7 +15,7 @@ class PomodoroManager {
     private _statusBarStartButton: StatusBarItem;
     private _statusBarPauseButton: StatusBarItem;
 
-    constructor(public configuration?: IPomodoroConfig[]) {
+    constructor(private configuration?: IPomodoroConfig[]) {
         // create status bar items
         if (!this._statusBarText) {
             this._statusBarText = window.createStatusBarItem(StatusBarAlignment.Left);
@@ -34,20 +34,25 @@ class PomodoroManager {
             this._statusBarPauseButton.tooltip = 'Pause Pomodoro';
         }
 
+        this.initialize();
+        this.draw();
+    }
+
+    // private methods
+    private initialize() {
         this._pomodori = [];
 
-        if (!configuration || typeof (configuration) !== 'array' || configuration.length < 1) {
+        if (!this.configuration || typeof (this.configuration) !== 'array' || this.configuration.length < 1) {
             this._pomodori.push(new Pomodoro());
         } else {
             const minutesPerHour = 60;
-            for (let i = 0; i < configuration.length; i++) {
-                let pomodoro = new Pomodoro(configuration[i].work * minutesPerHour, configuration[i].pause * minutesPerHour);
+            for (let i = 0; i < this.configuration.length; i++) {
+                let pomodoro = new Pomodoro(this.configuration[i].work * minutesPerHour, this.configuration[i].pause * minutesPerHour);
                 this._pomodori.push(pomodoro);
             }
         }
 
         this._currentPomodoro = this._pomodori[0];
-        this.draw();
     }
 
     private update() {
@@ -85,6 +90,7 @@ class PomodoroManager {
         this._statusBarText.show();
     }
 
+    // public methods
     public start() {
         // TODO
     }
@@ -102,6 +108,7 @@ class PomodoroManager {
         this._currentPomodoro.dispose();
 
         // reset Pomodori
+        this.initialize();
 
         this._statusBarText.dispose();
         this._statusBarStartButton.dispose();
