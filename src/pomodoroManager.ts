@@ -96,7 +96,7 @@ class PomodoroManager {
     }
 
     public pause() {
-        // TODO
+        this.currentPomodoro.pause();
     }
 
     public reset() {

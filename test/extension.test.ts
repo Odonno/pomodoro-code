@@ -316,7 +316,7 @@ suite("Extension Tests", () => {
             done();
         });
 
-        test.only("Starting a PomodoroManager should update status of the first Pomodoro", (done) => {
+        test("Starting a PomodoroManager should update status of the first Pomodoro", (done) => {
             // arrange
             let pomodoroManager = new PomodoroManager();
 
@@ -328,6 +328,22 @@ suite("Extension Tests", () => {
             assert.equal(25 * 60, pomodoroManager.currentPomodoro.timer.currentTime);
             assert.equal(true, pomodoroManager.currentPomodoro.timer.isRunning);
             done();
+        });
+
+        test("Pausing a PomodoroManager should switch current Pomodoro to wait", (done) => {
+            // arrange
+            let pomodoroManager = new PomodoroManager();
+            pomodoroManager.start();
+
+            // act
+            // assert
+            setTimeout(() => {
+                pomodoroManager.pause();
+                assert.equal(PomodoroStatus.Wait, pomodoroManager.currentPomodoro.status);
+                assert.equal(25 * 60 - 1, pomodoroManager.currentPomodoro.timer.currentTime);
+                assert.equal(false, pomodoroManager.currentPomodoro.timer.isRunning);
+                done();
+            }, 1000); // after 1 second
         });
     });
 
