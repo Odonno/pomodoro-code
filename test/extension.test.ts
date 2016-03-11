@@ -411,6 +411,32 @@ suite("Extension Tests", () => {
                 done();
             }, 4500); // after almost 4 seconds
         });
+        
+        test("Starting a new session in PomodoroManager should start the first Pomodoro of the new session", (done) => {
+            // arrange
+            let configuration: IPomodoroConfig[] = [
+                {
+                    work: 1 / 60,
+                    pause: 1 / 60
+                },
+                {
+                    work: 1 / 60,
+                    pause: 1 / 60
+                }
+            ];
+            let pomodoroManager = new PomodoroManager(configuration);
+
+            // act
+            pomodoroManager.start();
+
+            // assert
+            setTimeout(() => {
+                pomodoroManager.start();
+                assert.equal(pomodoroManager.currentPomodoro, pomodoroManager.pomodori[0]);
+                assert.equal(pomodoroManager.currentPomodoro.status, PomodoroStatus.Work);
+                done();
+            }, 4500); // after almost 4 seconds
+        });
     });
 
 });

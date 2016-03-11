@@ -14,6 +14,10 @@ class PomodoroManager {
         return this.pomodori[this._pomodoroIndex];
     }
 
+    public get isSessionFinished(): boolean {
+        return !this.currentPomodoro;
+    }
+
     // UI properties
     private _statusBarText: StatusBarItem;
     private _statusBarStartButton: StatusBarItem;
@@ -48,14 +52,14 @@ class PomodoroManager {
         if (this.currentPomodoro.status === PomodoroStatus.Done) {
             this._pomodoroIndex++;
 
-            if (this.currentPomodoro) {
+            if (!this.isSessionFinished) {
                 this.start();
             }
         }
     }
 
     private draw() {
-        if (!this.currentPomodoro) {
+        if (this.isSessionFinished) {
             // show text when all Pomodoro sessions are over
             this._statusBarText.text = 'session over, start again ?';
             this._statusBarStartButton.show();
@@ -99,6 +103,11 @@ class PomodoroManager {
 
     // public methods
     public start() {
+        // launch a new session if the previous is already finished
+        if (this.isSessionFinished) {
+            this._pomodoroIndex = 0;
+        }
+
         this.currentPomodoro.start();
         this.currentPomodoro.ontick = () => {
             this.update();
