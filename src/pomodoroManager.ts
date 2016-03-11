@@ -7,8 +7,12 @@ import Timer = require('./timer');
 
 class PomodoroManager {
     // logic properties
-    public currentPomodoro: Pomodoro;
+    private _pomodoroIndex: number;
     public pomodori: Pomodoro[];
+    
+    public get currentPomodoro() {
+        return this.pomodori[this._pomodoroIndex];
+    }
 
     // UI properties
     private _statusBarText: StatusBarItem;
@@ -40,8 +44,10 @@ class PomodoroManager {
 
     // private methods
     private update() {
-        // TODO : handle launch of the next Pomodoro
-
+        // handle launch of the next Pomodoro
+        if (this.currentPomodoro.status === PomodoroStatus.Done) {
+            this._pomodoroIndex++;
+        }
     }
 
     private draw() {
@@ -88,6 +94,7 @@ class PomodoroManager {
     }
 
     public reset() {
+        this._pomodoroIndex = 0;
         this.pomodori = [];
 
         if (!this.configuration || this.configuration.length < 1) {
@@ -99,8 +106,6 @@ class PomodoroManager {
                 this.pomodori.push(pomodoro);
             }
         }
-
-        this.currentPomodoro = this.pomodori[0];
     }
 
     public dispose() {

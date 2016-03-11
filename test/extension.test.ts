@@ -360,6 +360,33 @@ suite("Extension Tests", () => {
                 done();
             }, 1000); // after 1 second
         });
+        
+        test("The end of the first Pomodoro should start the next Pomodoro", (done) => {
+            // arrange
+            let configuration: IPomodoroConfig[] = [
+                {
+                    work: 1 / 60,
+                    pause: 1 / 60
+                },
+                {
+                    work: 1 / 60,
+                    pause: 1 / 60
+                }
+            ];
+            let pomodoroManager = new PomodoroManager(configuration);
+
+            // act
+            pomodoroManager.start();
+            
+            // assert
+            // assert
+            setTimeout(() => {
+                setTimeout(() => {
+                    assert.strictEqual(pomodoroManager.currentPomodoro, pomodoroManager.pomodori[1]);
+                    done();
+                }, 1000); // after another 1 second
+            }, 1000); // after 1 second
+        });
     });
 
 });
