@@ -56,27 +56,35 @@ class PomodoroManager {
 
     private draw() {
         if (!this.currentPomodoro) {
-            // TODO
+            // show text when all Pomodoro sessions are over
+            this._statusBarText.text = 'session over, start again ?';
+            this._statusBarStartButton.show();
+            this._statusBarPauseButton.hide();
             return;
         }
-        
+
         let seconds = this.currentPomodoro.timer.currentTime % 60;
         let minutes = (this.currentPomodoro.timer.currentTime - seconds) / 60;
 
         // update status bar (text)
         let timerPart = ((minutes < 10) ? '0' : '') + minutes + ':' + ((seconds < 10) ? '0' : '') + seconds
+
         let statusPart = '';
         if (this.currentPomodoro.status == PomodoroStatus.Work) {
-            statusPart += ' (work)';
-        } else if (this.currentPomodoro.status == PomodoroStatus.Pause) {
-            statusPart += ' (pause)';
+            statusPart += ' - work';
+        }
+        if (this.currentPomodoro.status == PomodoroStatus.Pause) {
+            statusPart += ' - pause';
         }
 
-        this._statusBarText.text = timerPart + statusPart;
-    }
+        let pomodoroNumberPart = '';
+        if (this.pomodori.length > 1) {
+            pomodoroNumberPart += ' (' + (this._pomodoroIndex + 1) + ' out of ' + this.pomodori.length + ' pomodori)';
+        }
 
-    private toggleButtons() {
-        // update status bar (visibility)
+        this._statusBarText.text = timerPart + statusPart + pomodoroNumberPart;
+
+        // update status bar (buttons visibility)
         if (this.currentPomodoro.status == PomodoroStatus.None ||
             this.currentPomodoro.status == PomodoroStatus.Wait) {
             this._statusBarStartButton.show();
@@ -107,8 +115,10 @@ class PomodoroManager {
         this.pomodori = [];
 
         if (!this.configuration || this.configuration.length < 1) {
+            // create a single Pomodoro by default
             this.pomodori.push(new Pomodoro());
         } else {
+            // create a new collection of Pomodori
             const minutesPerHour = 60;
             for (let i = 0; i < this.configuration.length; i++) {
                 let pomodoro = new Pomodoro(this.configuration[i].work * minutesPerHour, this.configuration[i].pause * minutesPerHour);
@@ -124,6 +134,7 @@ class PomodoroManager {
         // reset Pomodori
         this.reset();
 
+        // reset UI
         this._statusBarText.dispose();
         this._statusBarStartButton.dispose();
         this._statusBarPauseButton.dispose();
