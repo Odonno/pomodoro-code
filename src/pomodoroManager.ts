@@ -9,7 +9,7 @@ class PomodoroManager {
     // logic properties
     private _pomodoroIndex: number;
     public pomodori: Pomodoro[];
-    
+
     public get currentPomodoro() {
         return this.pomodori[this._pomodoroIndex];
     }
@@ -47,10 +47,19 @@ class PomodoroManager {
         // handle launch of the next Pomodoro
         if (this.currentPomodoro.status === PomodoroStatus.Done) {
             this._pomodoroIndex++;
+
+            if (this.currentPomodoro) {
+                this.start();
+            }
         }
     }
 
     private draw() {
+        if (!this.currentPomodoro) {
+            // TODO
+            return;
+        }
+        
         let seconds = this.currentPomodoro.timer.currentTime % 60;
         let minutes = (this.currentPomodoro.timer.currentTime - seconds) / 60;
 
