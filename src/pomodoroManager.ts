@@ -61,9 +61,15 @@ class PomodoroManager {
     private draw() {
         if (this.isSessionFinished) {
             // show text when all Pomodoro sessions are over
-            this._statusBarText.text = 'session over, start again ?';
+            this._statusBarText.text = 'session over, start again ?';            
             this._statusBarStartButton.show();
             this._statusBarPauseButton.hide();
+            
+            // show message if user needs a longer break
+            if (this.pomodori.length > 1) {
+                window.showInformationMessage('Well done ! You should now take a longer break.');
+            }
+            
             return;
         }
 
