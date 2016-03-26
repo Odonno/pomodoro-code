@@ -14,8 +14,16 @@ export function activate(context: ExtensionContext) {
     // This line of code will only be executed once when your extension is activated
     console.log('Congratulations, your extension "pomodoro-code" is now active!');
 
-    // read config file to create a new Pomodoro Manager
-    let configFilePath = context.extensionPath + '/out/config.json';
+    // read config file to create a new Pomodoro Manager    
+    let configFilePath: string;
+    if (process.platform === 'win32') {
+        configFilePath = process.env.APPDATA + '/Code/User/settings.json';
+    } else if (process.platform === 'darwin') {
+        configFilePath = process.env.HOME + '/Library/Application Support/Code/User/settings.json';
+    } else {
+        configFilePath = process.env.HOME + '/.config/Code/User/settings.json';
+    }
+
     let pomodoroManager: PomodoroManager;
 
     fs.access(configFilePath, fs.F_OK, function(err) {
@@ -23,7 +31,12 @@ export function activate(context: ExtensionContext) {
         let config: IPomodoroConfig[];
 
         if (!err) {
-            config = JSON.parse(fs.readFileSync(configFilePath, 'utf8'));
+            let settingsFile = fs.readFileSync(configFilePath, 'utf8'); // retrieve settings
+            let userSettings = JSON.parse(settingsFile.replace(/(\/\*([\s\S]*?)\*\/)|(\/\/(.*)$)/gm, '')); // remove comments from settings.json file
+
+            if (userSettings && userSettings.pomodori) {
+                config = userSettings.pomodori;
+            }
         }
 
         pomodoroManager = new PomodoroManager(config);
